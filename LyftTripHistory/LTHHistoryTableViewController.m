@@ -20,6 +20,10 @@
     
     [self configureNavigationItem];
     
+    self.tableView.estimatedRowHeight = 75.0;
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
+
+    
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
     
@@ -68,7 +72,7 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"LTHHeaderTableViewCell" forIndexPath:indexPath];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"LTHDetailTableViewCell" forIndexPath:indexPath];
     
     // Configure the cell...
     

@@ -48,6 +48,49 @@
                                     </variation>
                                 </tableViewCellContentView>
                             </tableViewCell>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="LTHDetailTableViewCell" rowHeight="75" id="QMU-ZS-dYo" customClass="LTHDetailTableViewCell">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="QMU-ZS-dYo" id="IbG-t5-mS1">
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_car" translatesAutoresizingMaskIntoConstraints="NO" id="hNc-cz-2ya">
+                                            <rect key="frame" x="30" y="14" width="26" height="21"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="20.5" id="7ct-zP-4de"/>
+                                                <constraint firstAttribute="width" constant="26.5" id="lak-4o-Tp8"/>
+                                            </constraints>
+                                        </imageView>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="185 Clara St &gt; 568 Brannan St" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TMO-a2-3GU">
+                                            <rect key="frame" x="76" y="14" width="504" height="21"/>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                            <color key="textColor" red="0.38431372549999998" green="0.37647058820000001" blue="0.36470588240000001" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="3:35pm­-3​:44pm (9 min, 14 sec)" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8Qs-Ml-Adp">
+                                            <rect key="frame" x="76" y="45" width="494" height="15"/>
+                                            <fontDescription key="fontDescription" type="system" weight="thin" pointSize="14"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstAttribute="trailing" secondItem="8Qs-Ml-Adp" secondAttribute="trailing" constant="30" id="66Z-f1-kzo"/>
+                                        <constraint firstItem="TMO-a2-3GU" firstAttribute="top" secondItem="IbG-t5-mS1" secondAttribute="top" constant="14" id="E1g-ZX-9rF"/>
+                                        <constraint firstItem="8Qs-Ml-Adp" firstAttribute="top" secondItem="TMO-a2-3GU" secondAttribute="bottom" constant="10" id="FkJ-lp-4gr"/>
+                                        <constraint firstItem="8Qs-Ml-Adp" firstAttribute="leading" secondItem="TMO-a2-3GU" secondAttribute="leading" id="Fqd-zw-HW0"/>
+                                        <constraint firstAttribute="trailing" secondItem="TMO-a2-3GU" secondAttribute="trailing" constant="20" id="HaM-Ps-7kI"/>
+                                        <constraint firstItem="hNc-cz-2ya" firstAttribute="leading" secondItem="IbG-t5-mS1" secondAttribute="leading" constant="30" id="Y38-lk-tb3"/>
+                                        <constraint firstItem="TMO-a2-3GU" firstAttribute="top" secondItem="hNc-cz-2ya" secondAttribute="top" id="sCb-oJ-Ztl"/>
+                                        <constraint firstAttribute="bottom" secondItem="8Qs-Ml-Adp" secondAttribute="bottom" constant="14" id="uek-wQ-qbj"/>
+                                        <constraint firstItem="TMO-a2-3GU" firstAttribute="leading" secondItem="hNc-cz-2ya" secondAttribute="trailing" constant="20" id="wTj-ml-gfL"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="timeLabel" destination="8Qs-Ml-Adp" id="Sio-XT-dTY"/>
+                                    <outlet property="titleLabel" destination="TMO-a2-3GU" id="i7Q-D5-DuE"/>
+                                </connections>
+                            </tableViewCell>
                         </prototypes>
                         <connections>
                             <outlet property="dataSource" destination="9aL-p3-Tm7" id="3Cg-bS-PhF"/>
@@ -78,4 +121,7 @@
             <point key="canvasLocation" x="-374" y="379"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="icon_car" width="26" height="20"/>
+    </resources>
 </document>
