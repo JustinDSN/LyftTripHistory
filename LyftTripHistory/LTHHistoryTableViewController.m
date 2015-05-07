@@ -8,8 +8,11 @@
 
 #import "LTHHistoryTableViewController.h"
 #import "LTHHeaderTableViewCell.h"
+#import "LTHLocationManager.h"
 
 @interface LTHHistoryTableViewController () <LTHHeaderTableViewCellDelegate>
+
+@property (nonatomic) LTHLocationManager *locationManager;
 
 @end
 
@@ -17,6 +20,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.locationManager = [[LTHLocationManager alloc] init];
     
     [self configureNavigationItem];
     
@@ -91,10 +96,35 @@
 
 #pragma mark - LTHHeaderTableViewCellDelegate
 
-- (void)headerTableViewCell:(LTHHeaderTableViewCell *)cell didEnableToggleTripLogging:(BOOL)tripLoggingEnabled;
+- (void)headerTableViewCell:(LTHHeaderTableViewCell *)cell didChangeToggleSwitch:(UISwitch *)toggleSwitch;
 {
-    if (tripLoggingEnabled) {
+    if (toggleSwitch.on) {
         NSLog(@"Trip Logging Enabled");
+        if (!self.locationManager.isAuthorized) {
+            BOOL result = [self.locationManager requestPermission];
+            
+            if (!result) {
+                //Display alert indicating that the user has disabled location services.
+                //TODO: Add help button to show user how to do it.
+                
+                NSString *title = NSLocalizedString(@"location_manager_denied_title", @"title for message: location manager has been denied by the user");
+                NSString *message = NSLocalizedString(@"location_manager_denied_message", @"location manager has been denied by the user");
+                                                      
+                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title
+                                                                                         message:message
+                                                                                  preferredStyle:UIAlertControllerStyleAlert];
+                
+                NSString *actionTitle = NSLocalizedString(@"ok_button", @"OK Button");
+                UIAlertAction *alertAction = [UIAlertAction actionWithTitle:actionTitle style:UIAlertActionStyleDefault handler:nil];
+                
+                [alertController addAction:alertAction];
+                
+                [self presentViewController:alertController animated:YES completion:^{
+                    [toggleSwitch setOn:NO animated:YES];
+                }];
+            }
+        }
+        
     } else {
         NSLog(@"Trip Logging Disabled");
     }

@@ -16,6 +16,7 @@
 		D0FEB7D11AFBD76F0014FF01 /* LTHHeaderTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D0FEB7D01AFBD76F0014FF01 /* LTHHeaderTableViewCell.m */; };
 		D0FEB7D51AFBD7FD0014FF01 /* LTHHistoryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0FEB7D41AFBD7FD0014FF01 /* LTHHistoryTableViewController.m */; };
 		D0FEB7D81AFBE3410014FF01 /* LTHDetailTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D0FEB7D71AFBE3410014FF01 /* LTHDetailTableViewCell.m */; };
+		D0FEB7DB1AFBE9DF0014FF01 /* LTHLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D0FEB7DA1AFBE9DF0014FF01 /* LTHLocationManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,6 +47,8 @@
 		D0FEB7D41AFBD7FD0014FF01 /* LTHHistoryTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LTHHistoryTableViewController.m; sourceTree = "<group>"; };
 		D0FEB7D61AFBE3410014FF01 /* LTHDetailTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LTHDetailTableViewCell.h; sourceTree = "<group>"; };
 		D0FEB7D71AFBE3410014FF01 /* LTHDetailTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LTHDetailTableViewCell.m; sourceTree = "<group>"; };
+		D0FEB7D91AFBE9DF0014FF01 /* LTHLocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LTHLocationManager.h; sourceTree = "<group>"; };
+		D0FEB7DA1AFBE9DF0014FF01 /* LTHLocationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LTHLocationManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,6 +102,8 @@
 				D0FEB7D41AFBD7FD0014FF01 /* LTHHistoryTableViewController.m */,
 				D0FEB7D61AFBE3410014FF01 /* LTHDetailTableViewCell.h */,
 				D0FEB7D71AFBE3410014FF01 /* LTHDetailTableViewCell.m */,
+				D0FEB7D91AFBE9DF0014FF01 /* LTHLocationManager.h */,
+				D0FEB7DA1AFBE9DF0014FF01 /* LTHLocationManager.m */,
 			);
 			path = LyftTripHistory;
 			sourceTree = "<group>";
@@ -232,6 +237,7 @@
 				D0FEB7D81AFBE3410014FF01 /* LTHDetailTableViewCell.m in Sources */,
 				D0FEB7D11AFBD76F0014FF01 /* LTHHeaderTableViewCell.m in Sources */,
 				D0FEB7AF1AFBD5880014FF01 /* AppDelegate.m in Sources */,
+				D0FEB7DB1AFBE9DF0014FF01 /* LTHLocationManager.m in Sources */,
 				D0FEB7AC1AFBD5880014FF01 /* main.m in Sources */,
 				D0FEB7D51AFBD7FD0014FF01 /* LTHHistoryTableViewController.m in Sources */,
 			);

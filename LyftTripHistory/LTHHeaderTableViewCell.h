@@ -11,7 +11,7 @@
 
 @protocol LTHHeaderTableViewCellDelegate <NSObject>
 
-- (void)headerTableViewCell:(LTHHeaderTableViewCell *)cell didEnableToggleTripLogging:(BOOL)tripLoggingEnabled;
+- (void)headerTableViewCell:(LTHHeaderTableViewCell *)cell didChangeToggleSwitch:(UISwitch *)toggleSwitch;
 
 @end
 

@@ -22,7 +22,7 @@
 
 - (IBAction)tripLoggingSwitchChanged:(UISwitch *)sender {
     if (self.delegate) {
-        [self.delegate headerTableViewCell:self didEnableToggleTripLogging:sender.on];
+        [self.delegate headerTableViewCell:self didChangeToggleSwitch:sender];
     }
 }
 

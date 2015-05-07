@@ -25,7 +25,7 @@
                                             <color key="textColor" red="0.38431372549019605" green="0.37647058823529411" blue="0.36470588235294116" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5DD-hm-tJD">
+                                        <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="5DD-hm-tJD">
                                             <rect key="frame" x="521" y="13" width="51" height="31"/>
                                             <color key="onTintColor" red="0.11372549019607843" green="0.69803921568627447" blue="0.67450980392156867" alpha="1" colorSpace="calibratedRGB"/>
                                             <connections>
