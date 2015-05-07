@@ -13,5 +13,7 @@
 @property (nonatomic, readonly) BOOL isAuthorized;
 
 - (BOOL)requestPermission;
+- (void)startStandardUpdates;
+- (void)stopStandardUpdates;
 
 @end

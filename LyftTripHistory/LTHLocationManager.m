@@ -29,6 +29,23 @@
     return self;
 }
 
+- (BOOL)isAuthorized
+{
+    CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
+    
+    switch (status) {
+        case kCLAuthorizationStatusNotDetermined:
+        case kCLAuthorizationStatusRestricted:
+        case kCLAuthorizationStatusDenied:
+            return NO;
+            break;
+        case kCLAuthorizationStatusAuthorizedAlways:
+        case kCLAuthorizationStatusAuthorizedWhenInUse:
+            return YES;
+            break;
+    }
+}
+
 - (BOOL)requestPermission
 {
     CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
@@ -44,20 +61,26 @@
     }
 }
 
-- (BOOL)isAuthorized
+- (void)startStandardUpdates
 {
-    CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
+    self.manager.desiredAccuracy = kCLLocationAccuracyBestForNavigation;
     
-    switch (status) {
-        case kCLAuthorizationStatusNotDetermined:
-        case kCLAuthorizationStatusRestricted:
-        case kCLAuthorizationStatusDenied:
-            return NO;
-            break;
-        case kCLAuthorizationStatusAuthorizedAlways:
-        case kCLAuthorizationStatusAuthorizedWhenInUse:
-            return YES;
-            break;
+    self.manager.distanceFilter = kCLDistanceFilterNone; // meters
+    
+    [self.manager startUpdatingLocation];
+}
+
+- (void)stopStandardUpdates
+{
+    [self.manager stopUpdatingLocation];
+}
+
+#pragma mark Location Manager Delegate
+
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
+{
+    for (CLLocation *location in locations) {
+        NSLog(@"Location: %@", location);
     }
 }
 

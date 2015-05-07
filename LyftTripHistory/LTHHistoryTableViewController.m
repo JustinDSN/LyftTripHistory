@@ -100,34 +100,44 @@
 {
     if (toggleSwitch.on) {
         NSLog(@"Trip Logging Enabled");
+        
         if (!self.locationManager.isAuthorized) {
             BOOL result = [self.locationManager requestPermission];
             
             if (!result) {
-                //Display alert indicating that the user has disabled location services.
-                //TODO: Add help button to show user how to do it.
-                
-                NSString *title = NSLocalizedString(@"location_manager_denied_title", @"title for message: location manager has been denied by the user");
-                NSString *message = NSLocalizedString(@"location_manager_denied_message", @"location manager has been denied by the user");
-                                                      
-                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title
-                                                                                         message:message
-                                                                                  preferredStyle:UIAlertControllerStyleAlert];
-                
-                NSString *actionTitle = NSLocalizedString(@"ok_button", @"OK Button");
-                UIAlertAction *alertAction = [UIAlertAction actionWithTitle:actionTitle style:UIAlertActionStyleDefault handler:nil];
-                
-                [alertController addAction:alertAction];
-                
-                [self presentViewController:alertController animated:YES completion:^{
-                    [toggleSwitch setOn:NO animated:YES];
-                }];
+                [self presentLocationServicesDeniedWithSwitch:toggleSwitch];
+                return;
             }
         }
         
+        [self.locationManager startStandardUpdates];
     } else {
         NSLog(@"Trip Logging Disabled");
+        [self.locationManager stopStandardUpdates];
     }
+}
+
+
+//Display alert indicating that the user has disabled location services.
+- (void)presentLocationServicesDeniedWithSwitch:(UISwitch *)toggleSwitch
+{
+    NSString *title = NSLocalizedString(@"location_manager_denied_title", @"title for message: location manager has been denied by the user");
+    NSString *message = NSLocalizedString(@"location_manager_denied_message", @"location manager has been denied by the user");
+    
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title
+                                                                             message:message
+                                                                      preferredStyle:UIAlertControllerStyleAlert];
+    
+    NSString *actionTitle = NSLocalizedString(@"ok_button", @"OK Button");
+    UIAlertAction *alertAction = [UIAlertAction actionWithTitle:actionTitle style:UIAlertActionStyleDefault handler:nil];
+    
+    //TODO: Add help button to show user how to do it.
+    
+    [alertController addAction:alertAction];
+    
+    [self presentViewController:alertController animated:YES completion:^{
+        [toggleSwitch setOn:NO animated:YES];
+    }];
 }
 
 @end
