@@ -9,11 +9,12 @@
 /* Begin PBXBuildFile section */
 		D0FEB7AC1AFBD5880014FF01 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D0FEB7AB1AFBD5880014FF01 /* main.m */; };
 		D0FEB7AF1AFBD5880014FF01 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D0FEB7AE1AFBD5880014FF01 /* AppDelegate.m */; };
-		D0FEB7B21AFBD5880014FF01 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0FEB7B11AFBD5880014FF01 /* ViewController.m */; };
 		D0FEB7B51AFBD5880014FF01 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D0FEB7B31AFBD5880014FF01 /* Main.storyboard */; };
 		D0FEB7B71AFBD5880014FF01 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D0FEB7B61AFBD5880014FF01 /* Images.xcassets */; };
 		D0FEB7BA1AFBD5880014FF01 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = D0FEB7B81AFBD5880014FF01 /* LaunchScreen.xib */; };
 		D0FEB7C61AFBD5880014FF01 /* LyftTripHistoryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D0FEB7C51AFBD5880014FF01 /* LyftTripHistoryTests.m */; };
+		D0FEB7D11AFBD76F0014FF01 /* LTHHeaderTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D0FEB7D01AFBD76F0014FF01 /* LTHHeaderTableViewCell.m */; };
+		D0FEB7D51AFBD7FD0014FF01 /* LTHHistoryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0FEB7D41AFBD7FD0014FF01 /* LTHHistoryTableViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -32,14 +33,16 @@
 		D0FEB7AB1AFBD5880014FF01 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		D0FEB7AD1AFBD5880014FF01 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		D0FEB7AE1AFBD5880014FF01 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		D0FEB7B01AFBD5880014FF01 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		D0FEB7B11AFBD5880014FF01 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		D0FEB7B41AFBD5880014FF01 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		D0FEB7B61AFBD5880014FF01 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		D0FEB7B91AFBD5880014FF01 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		D0FEB7BF1AFBD5880014FF01 /* LyftTripHistoryTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LyftTripHistoryTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0FEB7C41AFBD5880014FF01 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D0FEB7C51AFBD5880014FF01 /* LyftTripHistoryTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LyftTripHistoryTests.m; sourceTree = "<group>"; };
+		D0FEB7CF1AFBD76F0014FF01 /* LTHHeaderTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LTHHeaderTableViewCell.h; sourceTree = "<group>"; };
+		D0FEB7D01AFBD76F0014FF01 /* LTHHeaderTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LTHHeaderTableViewCell.m; sourceTree = "<group>"; };
+		D0FEB7D31AFBD7FD0014FF01 /* LTHHistoryTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LTHHistoryTableViewController.h; sourceTree = "<group>"; };
+		D0FEB7D41AFBD7FD0014FF01 /* LTHHistoryTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LTHHistoryTableViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,12 +86,14 @@
 			children = (
 				D0FEB7AD1AFBD5880014FF01 /* AppDelegate.h */,
 				D0FEB7AE1AFBD5880014FF01 /* AppDelegate.m */,
-				D0FEB7B01AFBD5880014FF01 /* ViewController.h */,
-				D0FEB7B11AFBD5880014FF01 /* ViewController.m */,
 				D0FEB7B31AFBD5880014FF01 /* Main.storyboard */,
 				D0FEB7B61AFBD5880014FF01 /* Images.xcassets */,
 				D0FEB7B81AFBD5880014FF01 /* LaunchScreen.xib */,
 				D0FEB7A91AFBD5880014FF01 /* Supporting Files */,
+				D0FEB7CF1AFBD76F0014FF01 /* LTHHeaderTableViewCell.h */,
+				D0FEB7D01AFBD76F0014FF01 /* LTHHeaderTableViewCell.m */,
+				D0FEB7D31AFBD7FD0014FF01 /* LTHHistoryTableViewController.h */,
+				D0FEB7D41AFBD7FD0014FF01 /* LTHHistoryTableViewController.m */,
 			);
 			path = LyftTripHistory;
 			sourceTree = "<group>";
@@ -219,9 +224,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D0FEB7B21AFBD5880014FF01 /* ViewController.m in Sources */,
+				D0FEB7D11AFBD76F0014FF01 /* LTHHeaderTableViewCell.m in Sources */,
 				D0FEB7AF1AFBD5880014FF01 /* AppDelegate.m in Sources */,
 				D0FEB7AC1AFBD5880014FF01 /* main.m in Sources */,
+				D0FEB7D51AFBD7FD0014FF01 /* LTHHistoryTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
