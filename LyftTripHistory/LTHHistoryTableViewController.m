@@ -18,6 +18,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    [self configureNavigationItem];
+    
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
     
@@ -28,6 +30,14 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - Navigation Bar Helper
+
+- (void)configureNavigationItem
+{
+    UIImage *image = [UIImage imageNamed:@"navbar"];
+    self.navigationItem.titleView = [[UIImageView alloc] initWithImage:image];
 }
 
 #pragma mark - Table view data source
