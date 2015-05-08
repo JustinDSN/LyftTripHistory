@@ -23,17 +23,6 @@ static NSDateFormatter *sDateFormatter;
     }
 }
 
-- (instancetype)initWithFirstLocation:(CLLocation *)location
-{
-    self = [super init];
-    
-    if (self) {
-        self.firstLocation = location;
-    }
-    
-    return self;
-}
-
 - (NSString *)description
 {
     NSMutableString *description = [[NSMutableString alloc] init];

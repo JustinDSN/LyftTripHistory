@@ -16,8 +16,6 @@
 @property (nonatomic) CLLocation *lastLocation;
 @property (nonatomic, copy) NSString *lastLocationAddress;
 
-- (instancetype)initWithFirstLocation:(CLLocation *)location;
-
 - (NSString *)durationDescription;
 - (NSString *)titleDescription;
 
