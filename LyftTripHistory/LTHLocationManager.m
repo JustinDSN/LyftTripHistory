@@ -185,46 +185,49 @@ static NSString * const LTHUserDefaultsKeyToggleSwitchEnabled = @"LTHUserDefault
 
 - (BOOL)toggleSwitchStateWithStatus:(CLAuthorizationStatus)newStatus toggleSwitchState:(BOOL)toggleSwitchState
 {
-    BOOL result;
+    BOOL finalState;
     
-    if (_authorizationStatus == kCLAuthorizationStatusNotDetermined)
-    {
-        if (newStatus == kCLAuthorizationStatusNotDetermined && toggleSwitchState) {
-            [self.manager requestWhenInUseAuthorization];
-            result = NO;
-        } else if (newStatus == kCLAuthorizationStatusDenied || newStatus == kCLAuthorizationStatusRestricted) {
-            result = NO;
-        } else if (newStatus == kCLAuthorizationStatusAuthorizedWhenInUse || newStatus == kCLAuthorizationStatusAuthorizedAlways) {
-            result =  YES;
+    if (toggleSwitchState) {
+        switch (newStatus) {
+            case kCLAuthorizationStatusNotDetermined:
+                //Ask user for permission
+                [self.manager requestWhenInUseAuthorization];
+                finalState = NO;
+                break;
+            case kCLAuthorizationStatusDenied:
+            case kCLAuthorizationStatusRestricted:
+                //Can't turn on switch, because location services is denied or restricted
+                finalState = NO;
+                //TODO: Alert view controller not enabled
+                break;
+            case kCLAuthorizationStatusAuthorizedAlways:
+            case kCLAuthorizationStatusAuthorizedWhenInUse:
+                //Can turn on switch, location services was allowed by user.
+                finalState = YES;
+                //Start updating location
+                [self.manager startUpdatingLocation];
+                break;
         }
-    } else if (_authorizationStatus == kCLAuthorizationStatusAuthorizedAlways || _authorizationStatus == kCLAuthorizationStatusAuthorizedWhenInUse) {
-        if (newStatus == kCLAuthorizationStatusDenied || newStatus == kCLAuthorizationStatusRestricted) {
-            result = NO;
-        } else if (!toggleSwitchState) {
-            [_timer fire];
-            result = NO;
-        } else {
-            result = toggleSwitchState;
-        }
-    } else if (_authorizationStatus == kCLAuthorizationStatusDenied || _authorizationStatus == kCLAuthorizationStatusRestricted) {
-        if (newStatus == kCLAuthorizationStatusAuthorizedAlways || newStatus == kCLAuthorizationStatusAuthorizedWhenInUse) {
-            result = NO;
-        }
-    }
-    
-    NSUserDefaults *standardDefaults = [NSUserDefaults standardUserDefaults];
-    [standardDefaults setBool:result forKey:LTHUserDefaultsKeyToggleSwitchEnabled];
-    
-    _authorizationStatus = newStatus;
-    
-    if (result) {
-        [self.manager startUpdatingLocation];
     } else {
-        [self.manager stopUpdatingLocation];
+        [self.manager stopUpdatingLocation];  //Stop updating location ASAP
+        finalState = NO;
+        
+        if (_timer) {
+            [_timer fire];
+            [_timer invalidate];
+            _timer = nil;
+        }
     }
     
-    [self.delegate trackingStatusDidUpdate:result];
+    if ([self currentState] != finalState) {
+        //Save finalState to NSUserDefaults
+        NSUserDefaults *standardDefaults = [NSUserDefaults standardUserDefaults];
+        [standardDefaults setBool:finalState forKey:LTHUserDefaultsKeyToggleSwitchEnabled];
+        
+        //Notify delegate
+        [self.delegate trackingStatusDidUpdate:finalState];
+    }
     
-    return result;
+    return finalState;
 }
 @end
