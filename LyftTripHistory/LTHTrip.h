@@ -11,12 +11,13 @@
 
 @interface LTHTrip : NSObject
 
+@property (nonatomic, readonly) NSString *durationDescription;
 @property (nonatomic) CLLocation *firstLocation;
 @property (nonatomic, copy) NSString *firstLocationAddress;
 @property (nonatomic) CLLocation *lastLocation;
 @property (nonatomic, copy) NSString *lastLocationAddress;
+@property (nonatomic, readonly) NSString *titleDescription;
 
-- (NSString *)durationDescription;
-- (NSString *)titleDescription;
++ (BOOL)tripShouldBeginWithLocation:(CLLocation *)location;
 
 @end

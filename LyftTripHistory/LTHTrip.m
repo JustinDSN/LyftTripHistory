@@ -8,6 +8,9 @@
 
 #import "LTHTrip.h"
 
+static float kMPHRatio = 2.23694;
+static int kMinMPH = 10;
+
 //Cache date formatter for efficiency
 static NSDateFormatter *sDateFormatter;
 
@@ -19,14 +22,15 @@ static NSDateFormatter *sDateFormatter;
 
 @implementation LTHTrip
 
-- (NSString *)description
+#pragma mark Class Methods
+
++ (BOOL)tripShouldBeginWithLocation:(CLLocation *)location
 {
-    NSMutableString *description = [[NSMutableString alloc] init];
-    [description appendFormat:@"%@\n", self.titleDescription];
-    [description appendFormat:@"%@\n", self.durationDescription];
-    
-    return description;
+    NSInteger mph = location.speed * kMPHRatio;
+    return (mph >= kMinMPH);
 }
+
+#pragma mark Properties
 
 - (NSString *)durationDescription
 {
@@ -51,6 +55,34 @@ static NSDateFormatter *sDateFormatter;
     }
 }
 
+- (BOOL)isInProgress
+{
+    return self.lastLocationAddress == nil;
+}
+
+- (NSString *)titleDescription
+{
+    NSString *inProgressString = NSLocalizedString(@"trip_in_progress_string", @"In Progress");
+    
+    NSString *formattedFirstLocationAddress = self.firstLocationAddress ?: inProgressString;
+    NSString *formattedSecondLocationAddress = self.lastLocationAddress ?: inProgressString;
+    
+    if ([formattedFirstLocationAddress isEqualToString:inProgressString]) {
+        return formattedFirstLocationAddress;
+    } else {
+        return [NSString stringWithFormat:@"%@ > %@\n", formattedFirstLocationAddress, formattedSecondLocationAddress];
+    }
+}
+
+#pragma mark Instance Methods
+
+- (NSString *)description
+{
+    NSString *description = [NSString stringWithFormat:@"%@ - %@", self.titleDescription, self.durationDescription];
+    
+    return description;
+}
+
 - (NSString *)durationComponents
 {
     //Calcualate the difference between two dates and build something like (1 hr, 15 min, 25 sec)
@@ -73,25 +105,6 @@ static NSDateFormatter *sDateFormatter;
     }
     
     return [NSString stringWithFormat:@"(%@)", [componentsArray componentsJoinedByString:@", "]];
-}
-
-- (BOOL)isInProgress
-{
-    return self.lastLocationAddress == nil;
-}
-
-- (NSString *)titleDescription
-{
-    NSString *inProgressString = NSLocalizedString(@"trip_in_progress_string", @"In Progress");
-    
-    NSString *formattedFirstLocationAddress = self.firstLocationAddress ?: inProgressString;
-    NSString *formattedSecondLocationAddress = self.lastLocationAddress ?: inProgressString;
-    
-    if ([formattedFirstLocationAddress isEqualToString:inProgressString]) {
-        return formattedFirstLocationAddress;
-    } else {
-        return [NSString stringWithFormat:@"%@ > %@\n", formattedFirstLocationAddress, formattedSecondLocationAddress];
-    }
 }
 
 @end
