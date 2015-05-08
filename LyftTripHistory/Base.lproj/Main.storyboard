@@ -4,7 +4,7 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
     </dependencies>
     <scenes>
-        <!--Root View Controller-->
+        <!--History Table View Controller-->
         <scene sceneID="8bC-fH-rMX">
             <objects>
                 <tableViewController id="9aL-p3-Tm7" customClass="LTHHistoryTableViewController" sceneMemberID="viewController">
@@ -127,7 +127,7 @@
                             <outlet property="delegate" destination="9aL-p3-Tm7" id="akA-Tx-SOL"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Root View Controller" id="hzp-3f-bio"/>
+                    <navigationItem key="navigationItem" id="hzp-3f-bio"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3y0-zd-XVE" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

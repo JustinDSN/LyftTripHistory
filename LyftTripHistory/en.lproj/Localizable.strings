@@ -1,0 +1,15 @@
+/* Error reverse geocoding location. */
+"error_reverse_geocoding_location" = "There was an error while locating an address.";
+
+/* location manager has been denied by the user */
+"location_manager_denied_message" = "Location services has been denied!";
+
+/* title for message: location manager has been denied by the user */
+"location_manager_denied_title" = "Location Services Disabled";
+
+/* OK Button */
+"ok_button" = "OK";
+
+/* In Progress */
+"trip_in_progress_string" = "In Progress";
+

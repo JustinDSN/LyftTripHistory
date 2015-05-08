@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		D0BABC851AFD21C50052F0AC /* LTHTripTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D0BABC841AFD21C50052F0AC /* LTHTripTests.m */; };
+		D0BABC881AFD6FDB0052F0AC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D0BABC8A1AFD6FDB0052F0AC /* InfoPlist.strings */; };
+		D0BABC8D1AFD6FDC0052F0AC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D0BABC8F1AFD6FDC0052F0AC /* InfoPlist.strings */; };
+		D0BABC931AFD6FDC0052F0AC /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = D0BABC951AFD6FDC0052F0AC /* Localizable.strings */; };
 		D0CD38501AFC3DFF007E9B7D /* LTHTripStore.m in Sources */ = {isa = PBXBuildFile; fileRef = D0CD384F1AFC3DFF007E9B7D /* LTHTripStore.m */; };
 		D0FEB7AC1AFBD5880014FF01 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D0FEB7AB1AFBD5880014FF01 /* main.m */; };
 		D0FEB7AF1AFBD5880014FF01 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D0FEB7AE1AFBD5880014FF01 /* AppDelegate.m */; };
@@ -34,6 +37,11 @@
 
 /* Begin PBXFileReference section */
 		D0BABC841AFD21C50052F0AC /* LTHTripTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LTHTripTests.m; sourceTree = "<group>"; };
+		D0BABC891AFD6FDB0052F0AC /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		D0BABC8E1AFD6FDC0052F0AC /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		D0BABC901AFD6FDC0052F0AC /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		D0BABC941AFD6FDC0052F0AC /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		D0BABC961AFD6FDC0052F0AC /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Main.strings; sourceTree = "<group>"; };
 		D0CD384E1AFC3DFF007E9B7D /* LTHTripStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LTHTripStore.h; sourceTree = "<group>"; };
 		D0CD384F1AFC3DFF007E9B7D /* LTHTripStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LTHTripStore.m; sourceTree = "<group>"; };
 		D0FEB7A61AFBD5880014FF01 /* LyftTripHistory.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LyftTripHistory.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -123,6 +131,8 @@
 		D0FEB7A91AFBD5880014FF01 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				D0BABC951AFD6FDC0052F0AC /* Localizable.strings */,
+				D0BABC8A1AFD6FDB0052F0AC /* InfoPlist.strings */,
 				D0FEB7AA1AFBD5880014FF01 /* Info.plist */,
 				D0FEB7AB1AFBD5880014FF01 /* main.m */,
 			);
@@ -142,6 +152,7 @@
 		D0FEB7C31AFBD5880014FF01 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				D0BABC8F1AFD6FDC0052F0AC /* InfoPlist.strings */,
 				D0FEB7C41AFBD5880014FF01 /* Info.plist */,
 			);
 			name = "Supporting Files";
@@ -227,7 +238,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D0BABC931AFD6FDC0052F0AC /* Localizable.strings in Resources */,
 				D0FEB7B51AFBD5880014FF01 /* Main.storyboard in Resources */,
+				D0BABC881AFD6FDB0052F0AC /* InfoPlist.strings in Resources */,
 				D0FEB7BA1AFBD5880014FF01 /* LaunchScreen.xib in Resources */,
 				D0FEB7B71AFBD5880014FF01 /* Images.xcassets in Resources */,
 			);
@@ -237,6 +250,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D0BABC8D1AFD6FDC0052F0AC /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -278,10 +292,35 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		D0BABC8A1AFD6FDB0052F0AC /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D0BABC891AFD6FDB0052F0AC /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		D0BABC8F1AFD6FDC0052F0AC /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D0BABC8E1AFD6FDC0052F0AC /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		D0BABC951AFD6FDC0052F0AC /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D0BABC941AFD6FDC0052F0AC /* en */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
 		D0FEB7B31AFBD5880014FF01 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				D0FEB7B41AFBD5880014FF01 /* Base */,
+				D0BABC961AFD6FDC0052F0AC /* en */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -290,6 +329,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				D0FEB7B91AFBD5880014FF01 /* Base */,
+				D0BABC901AFD6FDC0052F0AC /* en */,
 			);
 			name = LaunchScreen.xib;
 			sourceTree = "<group>";
