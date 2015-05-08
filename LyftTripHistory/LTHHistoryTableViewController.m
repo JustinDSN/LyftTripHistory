@@ -129,13 +129,23 @@
 - (void)tripStore:(LTHTripStore *)tripStore didCreateItem:(LTHTrip *)item
 {
     NSLog(@"Did create item.  Item: %@", item);
-    [self.tableView reloadData];
+    
+    NSUInteger indexOfObject = [self.tripStore.allItems indexOfObject:item];
+    
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:indexOfObject inSection:0];
+    
+    [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
 - (void)tripStore:(LTHTripStore *)tripStore didUpdateItem:(LTHTrip *)item
 {
     NSLog(@"Did update item.  Item: %@", item);
-    [self.tableView reloadData];
+    
+    NSUInteger indexOfObject = [self.tripStore.allItems indexOfObject:item];
+    
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:indexOfObject inSection:0];
+    
+    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
 #pragma mark - LTHLocationManagerDelegate
