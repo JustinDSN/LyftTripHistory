@@ -12,8 +12,9 @@
 
 static float kMPHRatio = 2.23694;
 static int kMinMPH = 10;
-static int kTimerInterval = 60;
-static int kDeviceIdleTime = 60;
+static int kTimerInterval = 5;
+static int kDeviceIdleTime = 5;
+static NSString *kStreetKey = @"Street";
 
 @interface LTHLocationManager () <CLLocationManagerDelegate> {
     LTHTrip *_trip;
@@ -21,6 +22,7 @@ static int kDeviceIdleTime = 60;
 }
 
 @property (nonatomic) CLLocationManager *manager;
+@property (nonatomic) CLGeocoder *geocoder;
 
 @end
 
@@ -48,6 +50,19 @@ static int kDeviceIdleTime = 60;
     
     return self;
 }
+
+#pragma mark - Properties
+
+- (CLGeocoder *)geocoder
+{
+    if (!_geocoder) {
+        _geocoder = [[CLGeocoder alloc] init];
+    }
+    
+    return _geocoder;
+}
+
+#pragma mark - Methods
 
 - (BOOL)isAuthorized
 {
@@ -106,6 +121,16 @@ static int kDeviceIdleTime = 60;
                 //Not tracking a trip, create a new trip.
                 NSLog(@"Creating trip.");
                 _trip = [[LTHTrip alloc] initWithFirstLocation:[locations firstObject]];
+                
+                //Reverse geocode the first location.
+                [self.geocoder reverseGeocodeLocation:_trip.firstLocation completionHandler:^(NSArray *placemarks, NSError *error) {
+                    if (error) {
+                        NSLog(@"Error: %@, UserInfo: %@", error.localizedDescription, error.userInfo);
+                    }
+                    
+                    CLPlacemark *placemark = [placemarks firstObject];
+                    _trip.firstLocationAddress = placemark.addressDictionary[kStreetKey];
+                }];
             }
         }
     }
@@ -123,6 +148,8 @@ static int kDeviceIdleTime = 60;
     NSLog(@"locationManagerDidResumeLocationUpdates");
 }
 
+#pragma mark - Helper Methods
+
 - (void)endTrip
 {
     NSLog(@"End Trip Called.");
@@ -130,8 +157,19 @@ static int kDeviceIdleTime = 60;
     
     if (intervalSinceLastUpdate > kDeviceIdleTime) {
         NSLog(@"The device has been still for %f seconds.", intervalSinceLastUpdate);
+        
+        if (!_trip.lastLocationAddress) {
+            [self.geocoder reverseGeocodeLocation:_trip.lastLocation completionHandler:^(NSArray *placemarks, NSError *error) {
+                if (error) {
+                    NSLog(@"Error: %@, UserInfo: %@", error.localizedDescription, error.userInfo);
+                }
+                
+                CLPlacemark *placemark = [placemarks firstObject];
+                _trip.lastLocationAddress = placemark.addressDictionary[kStreetKey];
+                
+                NSLog(@"Trip has been completed. Trip %@", _trip);
+            }];
+        }
     }
 }
-
-
 @end
