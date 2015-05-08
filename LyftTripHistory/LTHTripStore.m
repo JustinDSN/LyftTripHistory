@@ -56,7 +56,28 @@
     
     [self.privateItems addObject:item];
     
+    [item addObserver:self forKeyPath:@"firstLocationAddress" options:NSKeyValueObservingOptionNew context:nil];
+    [item addObserver:self forKeyPath:@"lastLocationAddress" options:NSKeyValueObservingOptionNew context:nil];
+    
+    [self.delegate tripStore:self didCreateItem:item];
+
     return item;
 }
+
+- (void)dealloc
+{
+    for (LTHTrip *trip in self.privateItems) {
+        //WARNING: if somehow a trip is not being observed, an error will occur.
+        [trip removeObserver:self forKeyPath:@"firstLocationAddress"];
+        [trip removeObserver:self forKeyPath:@"lastLocationAddress"];
+    }
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    [self.delegate tripStore:self didUpdateItem:object];
+}
+
+
 
 @end

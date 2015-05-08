@@ -9,9 +9,19 @@
 #import <Foundation/Foundation.h>
 #import "LTHTrip.h"
 
+@class LTHTripStore;
+
+@protocol LTHTripStoreDelegate <NSObject>
+
+- (void)tripStore:(LTHTripStore *)tripStore didCreateItem:(LTHTrip *)item;
+- (void)tripStore:(LTHTripStore *)tripStore didUpdateItem:(LTHTrip *)item;
+
+@end
+
 @interface LTHTripStore : NSObject
 
 @property (nonatomic, readonly) NSArray *allItems;
+@property (nonatomic, weak) id<LTHTripStoreDelegate> delegate;
 
 + (instancetype)sharedStore;
 

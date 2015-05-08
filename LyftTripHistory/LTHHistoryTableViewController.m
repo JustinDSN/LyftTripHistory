@@ -8,9 +8,9 @@
 
 #import "LTHHistoryTableViewController.h"
 #import "LTHHeaderTableViewCell.h"
-#import "LTHLocationManager.h"
+#import "LTHDetailTableViewCell.h"
 
-@interface LTHHistoryTableViewController () <LTHHeaderTableViewCellDelegate>
+@interface LTHHistoryTableViewController () <LTHTripStoreDelegate, LTHHeaderTableViewCellDelegate>
 
 @end
 
@@ -18,6 +18,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.tripStore.delegate = self;
     
     [self configureNavigationItem];
     
@@ -47,15 +49,14 @@
 
 #pragma mark - Table view data source
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    // Return the number of sections.
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
     return 1;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-#warning Incomplete method implementation.
-    // Return the number of rows in the section.
-    return 1;
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return self.tripStore.allItems.count;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
@@ -73,9 +74,13 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"LTHDetailTableViewCell" forIndexPath:indexPath];
+//    NSUInteger index = (self.tripStore.allItems.count - 1) - indexPath.row;
+    LTHTrip *trip = self.tripStore.allItems[indexPath.row];
     
-    // Configure the cell...
+    LTHDetailTableViewCell *cell = (LTHDetailTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"LTHDetailTableViewCell" forIndexPath:indexPath];
+    
+    cell.titleLabel.text = trip.titleDescription;
+    cell.timeLabel.text = trip.durationDescription;
     
     return cell;
 }
@@ -134,6 +139,20 @@
     [self presentViewController:alertController animated:YES completion:^{
         [toggleSwitch setOn:NO animated:YES];
     }];
+}
+
+#pragma mark - LTHTripStoreDelegate
+
+- (void)tripStore:(LTHTripStore *)tripStore didCreateItem:(LTHTrip *)item
+{
+    NSLog(@"Did create item.  Item: %@", item);
+    [self.tableView reloadData];
+}
+
+- (void)tripStore:(LTHTripStore *)tripStore didUpdateItem:(LTHTrip *)item
+{
+    NSLog(@"Did update item.  Item: %@", item);
+    [self.tableView reloadData];
 }
 
 @end
