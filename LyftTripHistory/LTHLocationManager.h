@@ -9,6 +9,14 @@
 #import <Foundation/Foundation.h>
 #import "LTHTripStore.h"
 
+typedef NS_ENUM(int, LTHTripLoggingStatus) {
+    LTHTripLoggingStatusNotDetermined = 0,
+    LTHTripLoggingStatusDenied,
+    LTHTripLoggingStatusRequestRequired,
+    LTHTripLoggingStatusAuthorizedOn,
+    LTHTripLoggingStatusAuthorizedOff
+};
+
 @class LTHLocationManager;
 
 @protocol LTHLocationManagerDelegate <NSObject>
@@ -21,12 +29,11 @@
 
 @property (nonatomic, readonly) BOOL isAuthorized;
 @property (nonatomic) id<LTHLocationManagerDelegate> delegate;
+@property (nonatomic, readonly) LTHTripLoggingStatus tripLoggingStatus;
 
 - (instancetype)initWithTripStore:(LTHTripStore *)tripStore;
 
 - (void)setTripLogging:(BOOL)enabled;
-
-- (BOOL)currentState;
 
 
 @end

@@ -61,7 +61,7 @@
 
     cell.delegate = self;
     self.toggleSwitch = cell.toggleSwitch;
-    self.toggleSwitch.on = self.locationManager.currentState;
+    self.toggleSwitch.on = (self.locationManager.tripLoggingStatus == LTHTripLoggingStatusAuthorizedOn);
     
     return cell;
 }

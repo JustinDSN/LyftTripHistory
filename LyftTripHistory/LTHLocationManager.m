@@ -14,9 +14,10 @@ static NSString *kStreetKey = @"Street";
 static NSString * const LTHUserDefaultsKeyToggleSwitchEnabled = @"LTHUserDefaultsKeyToggleSwitchEnabled";
 
 @interface LTHLocationManager () <CLLocationManagerDelegate> {
-    CLAuthorizationStatus _authorizationStatus;
+    LTHTripLoggingStatus _tripLoggingStatus;
     LTHTrip *_trip;
     NSTimer *_timer;
+    BOOL _userRequestedTripLogging;
 }
 
 @property (nonatomic) CLGeocoder *geocoder;
@@ -47,7 +48,7 @@ static NSString * const LTHUserDefaultsKeyToggleSwitchEnabled = @"LTHUserDefault
         self.manager.pausesLocationUpdatesAutomatically = YES;
         self.manager.activityType = CLActivityTypeAutomotiveNavigation;
         
-        _authorizationStatus = [CLLocationManager authorizationStatus];
+        _tripLoggingStatus = [self loggingStatusForStatus:[CLLocationManager authorizationStatus] tripLogging:_userRequestedTripLogging];
     }
     
     return self;
@@ -62,6 +63,11 @@ static NSString * const LTHUserDefaultsKeyToggleSwitchEnabled = @"LTHUserDefault
     }
     
     return _geocoder;
+}
+
+- (LTHTripLoggingStatus)tripLoggingStatus
+{
+    return _tripLoggingStatus;
 }
 
 #pragma mark - Methods
@@ -85,14 +91,15 @@ static NSString * const LTHUserDefaultsKeyToggleSwitchEnabled = @"LTHUserDefault
 
 - (void)setTripLogging:(BOOL)enabled
 {
-    [self toggleSwitchStateWithStatus:[CLLocationManager authorizationStatus] toggleSwitchState:enabled];
+    _userRequestedTripLogging = enabled;
+    [self changeAuthorizationToStatus:[CLLocationManager authorizationStatus] tripLogging:enabled];
 }
 
 #pragma mark Location Manager Delegate
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
 {
-    if ([self currentState]) {
+    if (_userRequestedTripLogging) {
         //If we're not tracking a trip, test each location to see if a trip should be created.
         if (_trip == nil) {
             //We're not currently tracking a trip
@@ -120,10 +127,7 @@ static NSString * const LTHUserDefaultsKeyToggleSwitchEnabled = @"LTHUserDefault
 
 - (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status
 {
-    NSUserDefaults *standardDefaults = [NSUserDefaults standardUserDefaults];
-    BOOL currentToggleSwitchState = [standardDefaults boolForKey:LTHUserDefaultsKeyToggleSwitchEnabled];
-    
-    [self toggleSwitchStateWithStatus:status toggleSwitchState:currentToggleSwitchState];
+    [self changeAuthorizationToStatus:status tripLogging:_userRequestedTripLogging];
 }
 
 #pragma mark - Helper Methods
@@ -188,57 +192,161 @@ static NSString * const LTHUserDefaultsKeyToggleSwitchEnabled = @"LTHUserDefault
     }];
 }
 
-- (BOOL)currentState
+- (BOOL)boolForLoggingStatus:(LTHTripLoggingStatus)status
 {
-    NSUserDefaults *standardDefaults = [NSUserDefaults standardUserDefaults];
-    return [standardDefaults boolForKey:LTHUserDefaultsKeyToggleSwitchEnabled];
+    switch (status) {
+        case LTHTripLoggingStatusAuthorizedOff:
+        case LTHTripLoggingStatusDenied:
+        case LTHTripLoggingStatusNotDetermined:
+        case LTHTripLoggingStatusRequestRequired:
+            return NO;
+            break;
+        case LTHTripLoggingStatusAuthorizedOn:
+            return YES;
+            break;
+    }
 }
 
-- (BOOL)toggleSwitchStateWithStatus:(CLAuthorizationStatus)newStatus toggleSwitchState:(BOOL)toggleSwitchState
+- (LTHTripLoggingStatus)loggingStatusForStatus:(CLAuthorizationStatus)status tripLogging:(BOOL)tripLogging
 {
-    BOOL finalState;
+    LTHTripLoggingStatus result = LTHTripLoggingStatusNotDetermined;
     
-    if (toggleSwitchState) {
-        switch (newStatus) {
-            case kCLAuthorizationStatusNotDetermined:
-                //Ask user for permission
-                [self.manager requestWhenInUseAuthorization];
-                finalState = NO;
+    if (tripLogging) {
+        switch (status) {
+            case kCLAuthorizationStatusAuthorizedAlways:
+            case kCLAuthorizationStatusAuthorizedWhenInUse:
+                result = LTHTripLoggingStatusAuthorizedOn;
                 break;
             case kCLAuthorizationStatusDenied:
             case kCLAuthorizationStatusRestricted:
-                //Can't turn on switch, because location services is denied or restricted
-                finalState = NO;
-                //TODO: Alert view controller not enabled
+                result = LTHTripLoggingStatusDenied;
                 break;
-            case kCLAuthorizationStatusAuthorizedAlways:
-            case kCLAuthorizationStatusAuthorizedWhenInUse:
-                //Can turn on switch, location services was allowed by user.
-                finalState = YES;
-                //Start updating location
-                [self.manager startUpdatingLocation];
+            case kCLAuthorizationStatusNotDetermined:
+                result = LTHTripLoggingStatusRequestRequired;
                 break;
         }
     } else {
-        [self.manager stopUpdatingLocation];  //Stop updating location ASAP
-        finalState = NO;
-        
-        if (_timer) {
-            [_timer fire];
-            [_timer invalidate];
-            _timer = nil;
+        switch (status) {
+            case kCLAuthorizationStatusAuthorizedAlways:
+            case kCLAuthorizationStatusAuthorizedWhenInUse:
+                result = LTHTripLoggingStatusAuthorizedOff;
+                break;
+            case kCLAuthorizationStatusDenied:
+            case kCLAuthorizationStatusRestricted:
+                result = LTHTripLoggingStatusDenied;
+                break;
+            case kCLAuthorizationStatusNotDetermined:
+                result = LTHTripLoggingStatusNotDetermined;
+                break;
         }
     }
     
-    if ([self currentState] != finalState) {
-        //Save finalState to NSUserDefaults
-        NSUserDefaults *standardDefaults = [NSUserDefaults standardUserDefaults];
-        [standardDefaults setBool:finalState forKey:LTHUserDefaultsKeyToggleSwitchEnabled];
-        
-        //Notify delegate
-        [self.delegate trackingStatusDidUpdate:finalState];
+    return result;
+}
+
+- (void)changeAuthorizationToStatus:(CLAuthorizationStatus)status tripLogging:(BOOL)tripLogging
+{
+    LTHTripLoggingStatus newTripLoggingStatus = [self loggingStatusForStatus:status tripLogging:tripLogging];
+    
+    switch (_tripLoggingStatus) {
+        case LTHTripLoggingStatusAuthorizedOff:
+            switch (newTripLoggingStatus) {
+                case LTHTripLoggingStatusAuthorizedOff:
+                    //Do nothing, no change.
+                    break;
+                case LTHTripLoggingStatusAuthorizedOn:
+                    [self.manager startUpdatingLocation];
+                    break;
+                case LTHTripLoggingStatusDenied:
+                    //Do nothing, no change.
+                    //TODO Notify view controller
+                    break;
+                default:
+                    NSLog(@"Unexpected newStatus of %d for LTHTripLoggingStatusAuthorizedOn", newTripLoggingStatus);
+                    break;
+            }
+            break;
+        case LTHTripLoggingStatusAuthorizedOn:
+            switch (newTripLoggingStatus) {
+                case LTHTripLoggingStatusAuthorizedOff:
+                    [self.manager stopUpdatingLocation];
+                    [self fireAndInvalidateTimer];
+                    break;
+                case LTHTripLoggingStatusAuthorizedOn:
+                    [self.manager startUpdatingLocation];
+                    break;
+                case LTHTripLoggingStatusDenied:
+                    [self.manager stopUpdatingLocation];
+                    [self fireAndInvalidateTimer];
+                    break;
+                default:
+                    NSLog(@"Unexpected newStatus of %d for LTHTripLoggingStatusAuthorizedOn", newTripLoggingStatus);
+                    break;
+            }
+            break;
+        case LTHTripLoggingStatusDenied:
+            switch (newTripLoggingStatus) {
+                case LTHTripLoggingStatusAuthorizedOff:
+                    //Do nothing, user doesn't want to start logging.
+                    break;
+                case LTHTripLoggingStatusAuthorizedOn:
+                    [self.manager startUpdatingLocation];
+                    break;
+                case LTHTripLoggingStatusDenied:
+                    //TODO Notify view controller
+                    break;
+                default:
+                    NSLog(@"Unexpected newStatus of %d for LTHTripLoggingStatusDenied", newTripLoggingStatus);
+                    break;
+            }
+            break;
+        case LTHTripLoggingStatusNotDetermined:
+            switch (newTripLoggingStatus) {
+                case LTHTripLoggingStatusRequestRequired:
+                    [self.manager requestWhenInUseAuthorization];
+                    break;
+                default:
+                    NSLog(@"Unexpected newStatus of %d for LTHTripLoggingStatusNotDetermined", newTripLoggingStatus);
+                    break;
+            }
+            break;
+        case LTHTripLoggingStatusRequestRequired:
+            switch (newTripLoggingStatus) {
+                case LTHTripLoggingStatusAuthorizedOn:
+                    [self.manager startUpdatingLocation];
+                    break;
+                case LTHTripLoggingStatusDenied:
+                    //Do nothing, no change.
+                    //Alert view controller of denial
+                    break;
+                default:
+                    NSLog(@"Unexpected newStatus of %d for LTHTripLoggingStatusRequestRequired", newTripLoggingStatus);
+                    break;
+            }
+            break;
     }
     
-    return finalState;
+    _tripLoggingStatus = newTripLoggingStatus;
+    
+    //Convert newLoggingStatus to bool
+    BOOL loggingEnabled = [self boolForLoggingStatus:newTripLoggingStatus];
+    
+    //Save finalState to NSUserDefaults
+//    NSUserDefaults *standardDefaults = [NSUserDefaults standardUserDefaults];
+//    [standardDefaults setBool:loggingEnabled forKey:LTHUserDefaultsKeyToggleSwitchEnabled];
+    
+    //Notify delegate
+    [self.delegate trackingStatusDidUpdate:loggingEnabled];
 }
+
+- (void)fireAndInvalidateTimer
+{
+    //Invalidate timer if we had one
+    if (_timer) {
+        [_timer fire];
+        [_timer invalidate];
+        _timer = nil;
+    }
+}
+
 @end
