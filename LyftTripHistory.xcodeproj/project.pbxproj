@@ -100,22 +100,22 @@
 			children = (
 				D0FEB7AD1AFBD5880014FF01 /* AppDelegate.h */,
 				D0FEB7AE1AFBD5880014FF01 /* AppDelegate.m */,
-				D0FEB7B31AFBD5880014FF01 /* Main.storyboard */,
 				D0FEB7B61AFBD5880014FF01 /* Images.xcassets */,
 				D0FEB7B81AFBD5880014FF01 /* LaunchScreen.xib */,
-				D0FEB7A91AFBD5880014FF01 /* Supporting Files */,
+				D0FEB7D61AFBE3410014FF01 /* LTHDetailTableViewCell.h */,
+				D0FEB7D71AFBE3410014FF01 /* LTHDetailTableViewCell.m */,
 				D0FEB7CF1AFBD76F0014FF01 /* LTHHeaderTableViewCell.h */,
 				D0FEB7D01AFBD76F0014FF01 /* LTHHeaderTableViewCell.m */,
 				D0FEB7D31AFBD7FD0014FF01 /* LTHHistoryTableViewController.h */,
 				D0FEB7D41AFBD7FD0014FF01 /* LTHHistoryTableViewController.m */,
-				D0FEB7D61AFBE3410014FF01 /* LTHDetailTableViewCell.h */,
-				D0FEB7D71AFBE3410014FF01 /* LTHDetailTableViewCell.m */,
 				D0FEB7D91AFBE9DF0014FF01 /* LTHLocationManager.h */,
 				D0FEB7DA1AFBE9DF0014FF01 /* LTHLocationManager.m */,
 				D0FEB7DC1AFC0BCA0014FF01 /* LTHTrip.h */,
 				D0FEB7DD1AFC0BCA0014FF01 /* LTHTrip.m */,
 				D0CD384E1AFC3DFF007E9B7D /* LTHTripStore.h */,
 				D0CD384F1AFC3DFF007E9B7D /* LTHTripStore.m */,
+				D0FEB7B31AFBD5880014FF01 /* Main.storyboard */,
+				D0FEB7A91AFBD5880014FF01 /* Supporting Files */,
 			);
 			path = LyftTripHistory;
 			sourceTree = "<group>";
