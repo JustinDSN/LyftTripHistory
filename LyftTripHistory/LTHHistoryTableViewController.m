@@ -152,7 +152,7 @@
 
 - (void)trackingStatusDidUpdate:(BOOL)status
 {
-    NSLog(@"LocationManager didChangeAuthorizationStatus: %d", status);
+    NSLog(@"trackingStatusDidUpdate enabled: %@", status ? @"YES" : @"NO");
     
     [self.toggleSwitch setOn:status animated:YES];
 }

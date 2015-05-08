@@ -12,7 +12,6 @@
 static float kMPHRatio = 2.23694;
 static int kMinMPH = 10;
 static int kTimerInterval = 5;
-static int kDeviceIdleTime = 5;
 static NSString *kStreetKey = @"Street";
 static NSString * const LTHUserDefaultsKeyToggleSwitchEnabled = @"LTHUserDefaultsKeyToggleSwitchEnabled";
 
@@ -112,7 +111,8 @@ static NSString * const LTHUserDefaultsKeyToggleSwitchEnabled = @"LTHUserDefault
                 //Reverse geocode the first location.
                 [self.geocoder reverseGeocodeLocation:_trip.firstLocation completionHandler:^(NSArray *placemarks, NSError *error) {
                     if (error) {
-                        NSLog(@"Error: %@, UserInfo: %@", error.localizedDescription, error.userInfo);
+                        NSLog(@"Error reverse geocoding first location: %@, UserInfo: %@", error.localizedDescription, error.userInfo);
+                        return;
                     }
                     
                     CLPlacemark *placemark = [placemarks firstObject];
@@ -166,7 +166,8 @@ static NSString * const LTHUserDefaultsKeyToggleSwitchEnabled = @"LTHUserDefault
     
     [self.geocoder reverseGeocodeLocation:tempTrip.lastLocation completionHandler:^(NSArray *placemarks, NSError *error) {
         if (error) {
-            NSLog(@"Error: %@, UserInfo: %@", error.localizedDescription, error.userInfo);
+            NSLog(@"Error reverse geocoding last location: %@, UserInfo: %@", error.localizedDescription, error.userInfo);
+            return;
         }
         
         CLPlacemark *placemark = [placemarks firstObject];
