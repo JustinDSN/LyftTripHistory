@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>00B58A35-54FB-4747-809E-E850103B0D75</string>
+	<key>IDESourceControlProjectName</key>
+	<string>LyftTripHistory</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>5159DA98E53458BDCE22DD419C43FFEFF1D72C3D</key>
+		<string>https://github.com/JustinDSN/LyftTripHistory.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>LyftTripHistory.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>5159DA98E53458BDCE22DD419C43FFEFF1D72C3D</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/JustinDSN/LyftTripHistory.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>5159DA98E53458BDCE22DD419C43FFEFF1D72C3D</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>5159DA98E53458BDCE22DD419C43FFEFF1D72C3D</string>
+			<key>IDESourceControlWCCName</key>
+			<string>LyftTripHistory</string>
+		</dict>
+	</array>
+</dict>
+</plist>
