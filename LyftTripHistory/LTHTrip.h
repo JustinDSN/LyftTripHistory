@@ -12,7 +12,9 @@
 @interface LTHTrip : NSObject
 
 @property (nonatomic) CLLocation *firstLocation;
+@property (nonatomic, copy) NSString *firstLocationAddress;
 @property (nonatomic) CLLocation *lastLocation;
+@property (nonatomic, copy) NSString *lastLocationAddress;
 
 - (instancetype)initWithFirstLocation:(CLLocation *)location;
 

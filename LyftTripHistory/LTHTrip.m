@@ -21,6 +21,15 @@
     return self;
 }
 
+- (NSString *)description
+{
+    NSMutableString *description = [[NSMutableString alloc] init];
+    [description appendFormat:@"%@ > %@\n", self.firstLocationAddress, self.lastLocationAddress];
+    [description appendFormat:@"%@\n", self.durationDescription];
+    
+    return description;
+}
+
 - (NSString *)durationDescription
 {
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
