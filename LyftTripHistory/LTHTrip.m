@@ -51,7 +51,16 @@
 
 - (NSString *)titleDescription
 {
-    return [NSString stringWithFormat:@"%@ > %@\n", self.firstLocationAddress, self.lastLocationAddress];
+    NSString *inProgressString = NSLocalizedString(@"trip_in_progress_string", @"In Progress");
+    
+    NSString *formattedFirstLocationAddress = self.firstLocationAddress ?: inProgressString;
+    NSString *formattedSecondLocationAddress = self.lastLocationAddress ?: inProgressString;
+    
+    if ([formattedFirstLocationAddress isEqualToString:inProgressString]) {
+        return formattedFirstLocationAddress;
+    } else {
+        return [NSString stringWithFormat:@"%@ > %@\n", formattedFirstLocationAddress, formattedSecondLocationAddress];
+    }
 }
 
 @end

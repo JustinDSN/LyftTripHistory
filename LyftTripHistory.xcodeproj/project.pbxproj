@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D0BABC851AFD21C50052F0AC /* LTHTripTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D0BABC841AFD21C50052F0AC /* LTHTripTests.m */; };
 		D0CD38501AFC3DFF007E9B7D /* LTHTripStore.m in Sources */ = {isa = PBXBuildFile; fileRef = D0CD384F1AFC3DFF007E9B7D /* LTHTripStore.m */; };
 		D0FEB7AC1AFBD5880014FF01 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D0FEB7AB1AFBD5880014FF01 /* main.m */; };
 		D0FEB7AF1AFBD5880014FF01 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D0FEB7AE1AFBD5880014FF01 /* AppDelegate.m */; };
@@ -32,6 +33,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		D0BABC841AFD21C50052F0AC /* LTHTripTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LTHTripTests.m; sourceTree = "<group>"; };
 		D0CD384E1AFC3DFF007E9B7D /* LTHTripStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LTHTripStore.h; sourceTree = "<group>"; };
 		D0CD384F1AFC3DFF007E9B7D /* LTHTripStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LTHTripStore.m; sourceTree = "<group>"; };
 		D0FEB7A61AFBD5880014FF01 /* LyftTripHistory.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LyftTripHistory.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -130,6 +132,7 @@
 		D0FEB7C21AFBD5880014FF01 /* LyftTripHistoryTests */ = {
 			isa = PBXGroup;
 			children = (
+				D0BABC841AFD21C50052F0AC /* LTHTripTests.m */,
 				D0FEB7C51AFBD5880014FF01 /* LyftTripHistoryTests.m */,
 				D0FEB7C31AFBD5880014FF01 /* Supporting Files */,
 			);
@@ -260,6 +263,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D0FEB7C61AFBD5880014FF01 /* LyftTripHistoryTests.m in Sources */,
+				D0BABC851AFD21C50052F0AC /* LTHTripTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
