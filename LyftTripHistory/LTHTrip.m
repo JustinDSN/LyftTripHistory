@@ -42,18 +42,37 @@ static NSDateFormatter *sDateFormatter;
     
     if (self.isInProgress) {
         lastLocationTime = NSLocalizedString(@"trip_in_progress_string", @"In Progress");
+        
+        return [NSString stringWithFormat:@"%@-%@", firstLocationTime, lastLocationTime];
     } else {
         lastLocationTime = [sDateFormatter stringFromDate:self.lastLocation.timestamp];
+        
+        return [NSString stringWithFormat:@"%@-%@ %@", firstLocationTime, lastLocationTime, [self durationComponents]];
+    }
+}
+
+- (NSString *)durationComponents
+{
+    //Calcualate the difference between two dates and build something like (1 hr, 15 min, 25 sec)
+    NSDateComponents *components = [[NSCalendar currentCalendar] components:NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond
+                                                                   fromDate:self.firstLocation.timestamp
+                                                                     toDate:self.lastLocation.timestamp
+                                                                    options:0];
+    
+    NSMutableArray *componentsArray = [[NSMutableArray alloc] initWithCapacity:3];
+    if (components.hour > 0) {
+        [componentsArray addObject:[NSString stringWithFormat:@"%ld hr", components.hour]];
     }
     
-    NSString *durationDescription = [NSString stringWithFormat:@"%@-%@", firstLocationTime, lastLocationTime];
+    if (components.minute > 0) {
+        [componentsArray addObject:[NSString stringWithFormat:@"%ld min", components.minute]];
+    }
     
-//    NSTimeInterval timeInterval = [self.lastLocation.timestamp timeIntervalSinceDate:self.firstLocation.timestamp];
-//    NSInteger hours = (int)interval / 3600;             // integer division to get the hours part
-//    NSInteger minutes = (interval - (hours*3600)) / 60; // interval minus hours part (in seconds) divided by 60 yields minutes
-//    NSString *timeDiff = [NSString stringWithFormat:@"%d:%02d", hours, minutes];
+    if (components.second > 0) {
+        [componentsArray addObject:[NSString stringWithFormat:@"%ld sec", components.second]];
+    }
     
-    return durationDescription;
+    return [NSString stringWithFormat:@"(%@)", [componentsArray componentsJoinedByString:@", "]];
 }
 
 - (BOOL)isInProgress
