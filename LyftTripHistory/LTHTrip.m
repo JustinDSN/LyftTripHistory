@@ -103,8 +103,11 @@ static NSDateFormatter *sDateFormatter;
     if (components.second > 0) {
         [componentsArray addObject:[NSString stringWithFormat:@"%ld sec", components.second]];
     }
-    
-    return [NSString stringWithFormat:@"(%@)", [componentsArray componentsJoinedByString:@", "]];
+    if (componentsArray.count) {
+        return [NSString stringWithFormat:@"(%@)", [componentsArray componentsJoinedByString:@", "]];
+    } else {
+        return @"";
+    }
 }
 
 @end
