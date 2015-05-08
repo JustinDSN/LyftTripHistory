@@ -58,6 +58,9 @@
                                         </mask>
                                     </variation>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="toggleSwitch" destination="5DD-hm-tJD" id="m2m-kH-1aE"/>
+                                </connections>
                             </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="LTHDetailTableViewCell" rowHeight="75" id="QMU-ZS-dYo" customClass="LTHDetailTableViewCell">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>

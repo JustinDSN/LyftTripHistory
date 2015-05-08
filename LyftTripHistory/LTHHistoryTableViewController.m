@@ -10,6 +10,8 @@
 #import "LTHHeaderTableViewCell.h"
 #import "LTHDetailTableViewCell.h"
 
+static NSString * const LTHUserDefaultsKeyToggleSwitchEnabled = @"LTHUserDefaultsKeyToggleSwitchEnabled";
+
 @interface LTHHistoryTableViewController () <LTHTripStoreDelegate, LTHHeaderTableViewCellDelegate>
 
 @end
@@ -21,17 +23,17 @@
     
     self.tripStore.delegate = self;
     
+    NSUserDefaults *standardDefaults = [NSUserDefaults standardUserDefaults];
+    BOOL toggleSwitchState = [standardDefaults boolForKey:LTHUserDefaultsKeyToggleSwitchEnabled];
+    
+    if (toggleSwitchState) {
+        [self.locationManager startStandardUpdates];
+    }
+    
     [self configureNavigationItem];
     
     self.tableView.estimatedRowHeight = 75.0;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
-
-    
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -63,7 +65,11 @@
 {
     LTHHeaderTableViewCell *cell = (LTHHeaderTableViewCell *) [tableView dequeueReusableCellWithIdentifier:@"LTHHeaderTableViewCell"];
     
+    NSUserDefaults *standardDefaults = [NSUserDefaults standardUserDefaults];
+    BOOL toggleSwitchState = [standardDefaults boolForKey:LTHUserDefaultsKeyToggleSwitchEnabled];
+    
     cell.delegate = self;
+    cell.toggleSwitch.on = toggleSwitchState;
     
     return cell;
 }
@@ -104,7 +110,10 @@
         if (!self.locationManager.isAuthorized) {
             BOOL result = [self.locationManager requestPermission];
             
-            if (!result) {
+            if (result) {
+                NSUserDefaults *standardDefaults = [NSUserDefaults standardUserDefaults];
+                [standardDefaults setBool:toggleSwitch.on forKey:LTHUserDefaultsKeyToggleSwitchEnabled];
+            } else {
                 [self presentLocationServicesDeniedWithSwitch:toggleSwitch];
                 return;
             }

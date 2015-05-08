@@ -18,5 +18,6 @@
 @interface LTHHeaderTableViewCell : UITableViewCell
 
 @property (nonatomic, weak) id<LTHHeaderTableViewCellDelegate> delegate;
+@property (weak, nonatomic) IBOutlet UISwitch *toggleSwitch;
 
 @end
