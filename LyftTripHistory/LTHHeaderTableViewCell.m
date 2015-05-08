@@ -21,9 +21,7 @@
 }
 
 - (IBAction)tripLoggingSwitchChanged:(UISwitch *)sender {
-    if (self.delegate) {
-        [self.delegate headerTableViewCell:self didChangeToggleSwitch:sender];
-    }
+    [self.delegate headerTableViewCell:self didChangeToggleSwitch:sender];
 }
 
 @end
