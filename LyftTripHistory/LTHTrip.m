@@ -13,16 +13,6 @@ static NSDateFormatter *sDateFormatter;
 
 @implementation LTHTrip
 
-+ (void)initialize
-{
-    if (!sDateFormatter) {
-        sDateFormatter = [[NSDateFormatter alloc] init];
-        sDateFormatter.dateFormat = @"h:mma";
-        sDateFormatter.AMSymbol = [sDateFormatter.AMSymbol lowercaseString];
-        sDateFormatter.PMSymbol = [sDateFormatter.PMSymbol lowercaseString];
-    }
-}
-
 - (NSString *)description
 {
     NSMutableString *description = [[NSMutableString alloc] init];
@@ -34,6 +24,13 @@ static NSDateFormatter *sDateFormatter;
 
 - (NSString *)durationDescription
 {
+    if (!sDateFormatter) {
+        sDateFormatter = [[NSDateFormatter alloc] init];
+        sDateFormatter.dateFormat = @"h:mma";
+        sDateFormatter.AMSymbol = [sDateFormatter.AMSymbol lowercaseString];
+        sDateFormatter.PMSymbol = [sDateFormatter.PMSymbol lowercaseString];
+    }
+    
     NSString *firstLocationTime = [sDateFormatter stringFromDate:self.firstLocation.timestamp];
     NSString *lastLocationTime = [sDateFormatter stringFromDate:self.lastLocation.timestamp];
     
