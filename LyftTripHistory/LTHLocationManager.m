@@ -99,7 +99,7 @@ static NSString * const LTHUserDefaultsKeyToggleSwitchEnabled = @"LTHUserDefault
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
 {
-    if (_userRequestedTripLogging) {
+    if ([self boolForLoggingStatus:_tripLoggingStatus]) {
         //If we're not tracking a trip, test each location to see if a trip should be created.
         if (_trip == nil) {
             //We're not currently tracking a trip
