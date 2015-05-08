@@ -19,5 +19,6 @@
 - (instancetype)initWithFirstLocation:(CLLocation *)location;
 
 - (NSString *)durationDescription;
+- (NSString *)titleDescription;
 
 @end

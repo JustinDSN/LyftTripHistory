@@ -24,7 +24,7 @@
 - (NSString *)description
 {
     NSMutableString *description = [[NSMutableString alloc] init];
-    [description appendFormat:@"%@ > %@\n", self.firstLocationAddress, self.lastLocationAddress];
+    [description appendFormat:@"%@\n", self.titleDescription];
     [description appendFormat:@"%@\n", self.durationDescription];
     
     return description;
@@ -47,6 +47,11 @@
     NSString *durationDescription = [NSString stringWithFormat:@"%@ - %@", firstLocationTime, lastLocationTime];
     
     return durationDescription;
+}
+
+- (NSString *)titleDescription
+{
+    return [NSString stringWithFormat:@"%@ > %@\n", self.firstLocationAddress, self.lastLocationAddress];
 }
 
 @end
