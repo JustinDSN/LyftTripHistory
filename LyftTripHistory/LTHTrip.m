@@ -11,6 +11,12 @@
 //Cache date formatter for efficiency
 static NSDateFormatter *sDateFormatter;
 
+@interface LTHTrip ()
+
+@property (nonatomic, readonly, getter=isInProgress) BOOL inProgress;
+
+@end
+
 @implementation LTHTrip
 
 - (NSString *)description
@@ -32,16 +38,27 @@ static NSDateFormatter *sDateFormatter;
     }
     
     NSString *firstLocationTime = [sDateFormatter stringFromDate:self.firstLocation.timestamp];
-    NSString *lastLocationTime = [sDateFormatter stringFromDate:self.lastLocation.timestamp];
+    NSString *lastLocationTime;
+    
+    if (self.isInProgress) {
+        lastLocationTime = NSLocalizedString(@"trip_in_progress_string", @"In Progress");
+    } else {
+        lastLocationTime = [sDateFormatter stringFromDate:self.lastLocation.timestamp];
+    }
+    
+    NSString *durationDescription = [NSString stringWithFormat:@"%@-%@", firstLocationTime, lastLocationTime];
     
 //    NSTimeInterval timeInterval = [self.lastLocation.timestamp timeIntervalSinceDate:self.firstLocation.timestamp];
 //    NSInteger hours = (int)interval / 3600;             // integer division to get the hours part
 //    NSInteger minutes = (interval - (hours*3600)) / 60; // interval minus hours part (in seconds) divided by 60 yields minutes
 //    NSString *timeDiff = [NSString stringWithFormat:@"%d:%02d", hours, minutes];
     
-    NSString *durationDescription = [NSString stringWithFormat:@"%@-%@", firstLocationTime, lastLocationTime];
-    
     return durationDescription;
+}
+
+- (BOOL)isInProgress
+{
+    return self.lastLocationAddress == nil;
 }
 
 - (NSString *)titleDescription
