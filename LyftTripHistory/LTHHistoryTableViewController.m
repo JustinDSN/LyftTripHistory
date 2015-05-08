@@ -74,7 +74,6 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-//    NSUInteger index = (self.tripStore.allItems.count - 1) - indexPath.row;
     LTHTrip *trip = self.tripStore.allItems[indexPath.row];
     
     LTHDetailTableViewCell *cell = (LTHDetailTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"LTHDetailTableViewCell" forIndexPath:indexPath];

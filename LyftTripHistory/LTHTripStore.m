@@ -54,7 +54,7 @@
 {
     LTHTrip *item = [[LTHTrip alloc] init];
     
-    [self.privateItems addObject:item];
+    [self.privateItems insertObject:item atIndex:0];
     
     [item addObserver:self forKeyPath:@"firstLocationAddress" options:NSKeyValueObservingOptionNew context:nil];
     [item addObserver:self forKeyPath:@"lastLocationAddress" options:NSKeyValueObservingOptionNew context:nil];
