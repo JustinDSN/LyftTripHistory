@@ -169,19 +169,17 @@ static NSString *kStreetKey = @"Street";
         if (intervalSinceLastUpdate > kDeviceIdleTime) {
             NSLog(@"The device has been still for %f seconds.", intervalSinceLastUpdate);
             
-            if (!_trip.lastLocationAddress) {
-                [self.geocoder reverseGeocodeLocation:_trip.lastLocation completionHandler:^(NSArray *placemarks, NSError *error) {
-                    if (error) {
-                        NSLog(@"Error: %@, UserInfo: %@", error.localizedDescription, error.userInfo);
-                    }
-                    
-                    CLPlacemark *placemark = [placemarks firstObject];
-                    _trip.lastLocationAddress = placemark.addressDictionary[kStreetKey];
-                    
-                    NSLog(@"Trip has been completed. Trip %@", _trip);
-                    _trip = nil;
-                }];
-            }
+            [self.geocoder reverseGeocodeLocation:_trip.lastLocation completionHandler:^(NSArray *placemarks, NSError *error) {
+                if (error) {
+                    NSLog(@"Error: %@, UserInfo: %@", error.localizedDescription, error.userInfo);
+                }
+                
+                CLPlacemark *placemark = [placemarks firstObject];
+                _trip.lastLocationAddress = placemark.addressDictionary[kStreetKey];
+                
+                NSLog(@"Trip has been completed. Trip %@", _trip);
+                _trip = nil;
+            }];
         }
     }
 }
