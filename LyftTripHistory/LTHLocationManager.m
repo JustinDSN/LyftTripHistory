@@ -9,8 +9,6 @@
 @import CoreLocation;
 #import "LTHLocationManager.h"
 
-static float kMPHRatio = 2.23694;
-static int kMinMPH = 10;
 static int kTimerInterval = 5;
 static NSString *kStreetKey = @"Street";
 static NSString * const LTHUserDefaultsKeyToggleSwitchEnabled = @"LTHUserDefaultsKeyToggleSwitchEnabled";
@@ -95,48 +93,18 @@ static NSString * const LTHUserDefaultsKeyToggleSwitchEnabled = @"LTHUserDefault
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
 {
     if ([self currentState]) {
-        for (CLLocation *location in locations) {
-            NSInteger mph = location.speed * kMPHRatio;
-            
-            //A given location is moving at 10 miles per hour.  Create a trip if we haven't already.
-            if (mph >= kMinMPH) {
-                NSLog(@"Speed in MPH: %ld", mph);
-                
-                if (_trip == nil) {
-                    //Not tracking a trip, create a new trip.
-                    NSLog(@"Creating trip.");
-                    
-                    _trip = [self.tripStore createItem];
-                    _trip.firstLocation = [locations firstObject];
-                    
-                    //Reverse geocode the first location.
-                    [self.geocoder reverseGeocodeLocation:_trip.firstLocation completionHandler:^(NSArray *placemarks, NSError *error) {
-                        if (error) {
-                            NSLog(@"Error reverse geocoding first location: %@, UserInfo: %@", error.localizedDescription, error.userInfo);
-                            return;
-                        }
-                        
-                        CLPlacemark *placemark = [placemarks firstObject];
-                        _trip.firstLocationAddress = placemark.addressDictionary[kStreetKey];
-                    }];
+        //If we're not tracking a trip, test each location to see if a trip should be created.
+        if (_trip == nil) {
+            //We're not currently tracking a trip
+            for (CLLocation *location in locations) {
+                if ([LTHTrip tripShouldBeginWithLocation:location]) {
+                    [self createTripForLocation:location];
                 }
             }
+        } else {
+            //Update the existing trip's last location with the last location received.
+            [self updateTripLastLocation:[locations lastObject]];
         }
-        
-        _trip.lastLocation = [locations lastObject];
-        
-        //Reset timer
-        if (_timer) {
-            [_timer invalidate];
-            _timer = nil;
-        }
-        
-        _timer = [NSTimer scheduledTimerWithTimeInterval:kTimerInterval
-                                                  target:self
-                                                selector:@selector(endTrip)
-                                                userInfo:nil
-                                                 repeats:NO];
-        
     }
 }
 
@@ -160,6 +128,45 @@ static NSString * const LTHUserDefaultsKeyToggleSwitchEnabled = @"LTHUserDefault
 
 #pragma mark - Helper Methods
 
+#pragma mark - Trip Helper Methods
+
+- (void)createTripForLocation:(CLLocation *)location
+{
+    NSLog(@"Creating trip.");
+    
+    _trip = [self.tripStore createItem];
+    _trip.firstLocation = location;
+    
+    //Reverse geocode the first location.
+    [self.geocoder reverseGeocodeLocation:_trip.firstLocation completionHandler:^(NSArray *placemarks, NSError *error) {
+        if (error) {
+            NSLog(@"Error reverse geocoding first location: %@, UserInfo: %@", error.localizedDescription, error.userInfo);
+            _trip.firstLocationAddress = NSLocalizedString(@"error_reverse_geocoding_location", @"Error reverse geocoding location.");
+            return;
+        }
+        
+        CLPlacemark *placemark = [placemarks firstObject];
+        _trip.firstLocationAddress = placemark.addressDictionary[kStreetKey];
+    }];
+}
+
+- (void)updateTripLastLocation:(CLLocation *)location
+{
+    _trip.lastLocation = location;
+    
+    //Reset timer
+    if (_timer) {
+        [_timer invalidate];
+        _timer = nil;
+    }
+    
+    _timer = [NSTimer scheduledTimerWithTimeInterval:kTimerInterval
+                                              target:self
+                                            selector:@selector(endTrip)
+                                            userInfo:nil
+                                             repeats:NO];
+}
+
 - (void)endTrip
 {
     NSLog(@"Timer Fired");
@@ -170,13 +177,14 @@ static NSString * const LTHUserDefaultsKeyToggleSwitchEnabled = @"LTHUserDefault
     [self.geocoder reverseGeocodeLocation:tempTrip.lastLocation completionHandler:^(NSArray *placemarks, NSError *error) {
         if (error) {
             NSLog(@"Error reverse geocoding last location: %@, UserInfo: %@", error.localizedDescription, error.userInfo);
+            _trip.lastLocationAddress = NSLocalizedString(@"error_reverse_geocoding_location", @"Error reverse geocoding location.");
             return;
         }
         
         CLPlacemark *placemark = [placemarks firstObject];
         tempTrip.lastLocationAddress = placemark.addressDictionary[kStreetKey];
         
-        NSLog(@"Trip has been completed. Trip %@", tempTrip);
+        NSLog(@"Trip completed.  Trip %@", tempTrip);
     }];
 }
 
