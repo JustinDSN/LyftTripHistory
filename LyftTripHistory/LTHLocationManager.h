@@ -9,14 +9,24 @@
 #import <Foundation/Foundation.h>
 #import "LTHTripStore.h"
 
+@class LTHLocationManager;
+
+@protocol LTHLocationManagerDelegate <NSObject>
+
+- (void)trackingStatusDidUpdate:(BOOL)status;
+
+@end
+
 @interface LTHLocationManager : NSObject
 
 @property (nonatomic, readonly) BOOL isAuthorized;
+@property (nonatomic) id<LTHLocationManagerDelegate> delegate;
 
 - (instancetype)initWithTripStore:(LTHTripStore *)tripStore;
 
-- (BOOL)requestPermission;
-- (void)startStandardUpdates;
-- (void)stopStandardUpdates;
+- (void)setTripLogging:(BOOL)enabled;
+
+- (BOOL)currentState;
+
 
 @end

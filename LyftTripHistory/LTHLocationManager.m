@@ -14,8 +14,10 @@ static int kMinMPH = 10;
 static int kTimerInterval = 5;
 static int kDeviceIdleTime = 5;
 static NSString *kStreetKey = @"Street";
+static NSString * const LTHUserDefaultsKeyToggleSwitchEnabled = @"LTHUserDefaultsKeyToggleSwitchEnabled";
 
 @interface LTHLocationManager () <CLLocationManagerDelegate> {
+    CLAuthorizationStatus _authorizationStatus;
     LTHTrip *_trip;
     NSTimer *_timer;
 }
@@ -48,11 +50,7 @@ static NSString *kStreetKey = @"Street";
         self.manager.pausesLocationUpdatesAutomatically = YES;
         self.manager.activityType = CLActivityTypeAutomotiveNavigation;
         
-        _timer = [NSTimer scheduledTimerWithTimeInterval:kTimerInterval
-                                                  target:self
-                                                selector:@selector(endTrip)
-                                                userInfo:nil
-                                                 repeats:YES];
+        _authorizationStatus = [CLLocationManager authorizationStatus];
     }
     
     return self;
@@ -88,29 +86,9 @@ static NSString *kStreetKey = @"Street";
     }
 }
 
-- (BOOL)requestPermission
+- (void)setTripLogging:(BOOL)enabled
 {
-    CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
-    
-    if (status == kCLAuthorizationStatusRestricted || status == kCLAuthorizationStatusDenied) {
-        NSLog(@"The user previously declined to use location services");
-        return NO;
-    } else if (status == kCLAuthorizationStatusNotDetermined) {
-        [self.manager requestWhenInUseAuthorization];
-        return YES;
-    } else {
-        return YES;
-    }
-}
-
-- (void)startStandardUpdates
-{
-    [self.manager startUpdatingLocation];
-}
-
-- (void)stopStandardUpdates
-{
-    [self.manager stopUpdatingLocation];
+    [self toggleSwitchStateWithStatus:[CLLocationManager authorizationStatus] toggleSwitchState:enabled];
 }
 
 #pragma mark Location Manager Delegate
@@ -145,6 +123,18 @@ static NSString *kStreetKey = @"Street";
     }
     
     _trip.lastLocation = [locations lastObject];
+
+    //Reset timer
+    if (_timer) {
+        [_timer invalidate];
+        _timer = nil;
+    }
+    
+    _timer = [NSTimer scheduledTimerWithTimeInterval:kTimerInterval
+                                              target:self
+                                            selector:@selector(endTrip)
+                                            userInfo:nil
+                                             repeats:NO];
 }
 
 - (void)locationManagerDidPauseLocationUpdates:(CLLocationManager *)manager
@@ -157,30 +147,83 @@ static NSString *kStreetKey = @"Street";
     NSLog(@"locationManagerDidResumeLocationUpdates");
 }
 
+- (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status
+{
+    NSUserDefaults *standardDefaults = [NSUserDefaults standardUserDefaults];
+    BOOL currentToggleSwitchState = [standardDefaults boolForKey:LTHUserDefaultsKeyToggleSwitchEnabled];
+    
+    [self toggleSwitchStateWithStatus:status toggleSwitchState:currentToggleSwitchState];
+}
+
 #pragma mark - Helper Methods
 
 - (void)endTrip
 {
     NSLog(@"Timer Fired");
     
-    if (_trip) {
-        NSTimeInterval intervalSinceLastUpdate = [[NSDate date] timeIntervalSinceDate:_trip.lastLocation.timestamp];
+    LTHTrip *tempTrip = _trip;
+    _trip = nil;
+    
+    [self.geocoder reverseGeocodeLocation:tempTrip.lastLocation completionHandler:^(NSArray *placemarks, NSError *error) {
+        if (error) {
+            NSLog(@"Error: %@, UserInfo: %@", error.localizedDescription, error.userInfo);
+        }
         
-        if (intervalSinceLastUpdate > kDeviceIdleTime) {
-            NSLog(@"The device has been still for %f seconds.", intervalSinceLastUpdate);
-            
-            [self.geocoder reverseGeocodeLocation:_trip.lastLocation completionHandler:^(NSArray *placemarks, NSError *error) {
-                if (error) {
-                    NSLog(@"Error: %@, UserInfo: %@", error.localizedDescription, error.userInfo);
-                }
-                
-                CLPlacemark *placemark = [placemarks firstObject];
-                _trip.lastLocationAddress = placemark.addressDictionary[kStreetKey];
-                
-                NSLog(@"Trip has been completed. Trip %@", _trip);
-                _trip = nil;
-            }];
+        CLPlacemark *placemark = [placemarks firstObject];
+        tempTrip.lastLocationAddress = placemark.addressDictionary[kStreetKey];
+        
+        NSLog(@"Trip has been completed. Trip %@", tempTrip);
+    }];
+}
+
+- (BOOL)currentState
+{
+    NSUserDefaults *standardDefaults = [NSUserDefaults standardUserDefaults];
+    return [standardDefaults boolForKey:LTHUserDefaultsKeyToggleSwitchEnabled];
+}
+
+- (BOOL)toggleSwitchStateWithStatus:(CLAuthorizationStatus)newStatus toggleSwitchState:(BOOL)toggleSwitchState
+{
+    BOOL result;
+    
+    if (_authorizationStatus == kCLAuthorizationStatusNotDetermined)
+    {
+        if (newStatus == kCLAuthorizationStatusNotDetermined && toggleSwitchState) {
+            [self.manager requestWhenInUseAuthorization];
+            result = NO;
+        } else if (newStatus == kCLAuthorizationStatusDenied || newStatus == kCLAuthorizationStatusRestricted) {
+            result = NO;
+        } else if (newStatus == kCLAuthorizationStatusAuthorizedWhenInUse || newStatus == kCLAuthorizationStatusAuthorizedAlways) {
+            result =  YES;
+        }
+    } else if (_authorizationStatus == kCLAuthorizationStatusAuthorizedAlways || _authorizationStatus == kCLAuthorizationStatusAuthorizedWhenInUse) {
+        if (newStatus == kCLAuthorizationStatusDenied || newStatus == kCLAuthorizationStatusRestricted) {
+            result = NO;
+        } else if (!toggleSwitchState) {
+            [_timer fire];
+            result = NO;
+        } else {
+            result = toggleSwitchState;
+        }
+    } else if (_authorizationStatus == kCLAuthorizationStatusDenied || _authorizationStatus == kCLAuthorizationStatusRestricted) {
+        if (newStatus == kCLAuthorizationStatusAuthorizedAlways || newStatus == kCLAuthorizationStatusAuthorizedWhenInUse) {
+            result = NO;
         }
     }
+    
+    NSUserDefaults *standardDefaults = [NSUserDefaults standardUserDefaults];
+    [standardDefaults setBool:result forKey:LTHUserDefaultsKeyToggleSwitchEnabled];
+    
+    _authorizationStatus = newStatus;
+    
+    if (result) {
+        [self.manager startUpdatingLocation];
+    } else {
+        [self.manager stopUpdatingLocation];
+    }
+    
+    [self.delegate trackingStatusDidUpdate:result];
+    
+    return result;
 }
 @end

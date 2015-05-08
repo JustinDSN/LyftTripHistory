@@ -10,9 +10,9 @@
 #import "LTHHeaderTableViewCell.h"
 #import "LTHDetailTableViewCell.h"
 
-static NSString * const LTHUserDefaultsKeyToggleSwitchEnabled = @"LTHUserDefaultsKeyToggleSwitchEnabled";
+@interface LTHHistoryTableViewController () <LTHTripStoreDelegate, LTHLocationManagerDelegate, LTHHeaderTableViewCellDelegate>
 
-@interface LTHHistoryTableViewController () <LTHTripStoreDelegate, LTHHeaderTableViewCellDelegate>
+@property (strong, nonatomic) UISwitch *toggleSwitch;
 
 @end
 
@@ -21,14 +21,8 @@ static NSString * const LTHUserDefaultsKeyToggleSwitchEnabled = @"LTHUserDefault
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.locationManager.delegate = self;
     self.tripStore.delegate = self;
-    
-    NSUserDefaults *standardDefaults = [NSUserDefaults standardUserDefaults];
-    BOOL toggleSwitchState = [standardDefaults boolForKey:LTHUserDefaultsKeyToggleSwitchEnabled];
-    
-    if (toggleSwitchState) {
-        [self.locationManager startStandardUpdates];
-    }
     
     [self configureNavigationItem];
     
@@ -64,12 +58,10 @@ static NSString * const LTHUserDefaultsKeyToggleSwitchEnabled = @"LTHUserDefault
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     LTHHeaderTableViewCell *cell = (LTHHeaderTableViewCell *) [tableView dequeueReusableCellWithIdentifier:@"LTHHeaderTableViewCell"];
-    
-    NSUserDefaults *standardDefaults = [NSUserDefaults standardUserDefaults];
-    BOOL toggleSwitchState = [standardDefaults boolForKey:LTHUserDefaultsKeyToggleSwitchEnabled];
-    
+
     cell.delegate = self;
-    cell.toggleSwitch.on = toggleSwitchState;
+    self.toggleSwitch = cell.toggleSwitch;
+    self.toggleSwitch.on = self.locationManager.currentState;
     
     return cell;
 }
@@ -104,26 +96,9 @@ static NSString * const LTHUserDefaultsKeyToggleSwitchEnabled = @"LTHUserDefault
 
 - (void)headerTableViewCell:(LTHHeaderTableViewCell *)cell didChangeToggleSwitch:(UISwitch *)toggleSwitch;
 {
-    if (toggleSwitch.on) {
-        NSLog(@"Trip Logging Enabled");
-        
-        if (!self.locationManager.isAuthorized) {
-            BOOL result = [self.locationManager requestPermission];
-            
-            if (result) {
-                NSUserDefaults *standardDefaults = [NSUserDefaults standardUserDefaults];
-                [standardDefaults setBool:toggleSwitch.on forKey:LTHUserDefaultsKeyToggleSwitchEnabled];
-            } else {
-                [self presentLocationServicesDeniedWithSwitch:toggleSwitch];
-                return;
-            }
-        }
-        
-        [self.locationManager startStandardUpdates];
-    } else {
-        NSLog(@"Trip Logging Disabled");
-        [self.locationManager stopStandardUpdates];
-    }
+    NSLog(@"Trip Logging %@", toggleSwitch.on ? @"Enabled" : @"Disabled");
+    [self.locationManager setTripLogging:toggleSwitch.on];
+    //            [self presentLocationServicesDeniedWithSwitch:toggleSwitch];
 }
 
 
@@ -161,6 +136,15 @@ static NSString * const LTHUserDefaultsKeyToggleSwitchEnabled = @"LTHUserDefault
 {
     NSLog(@"Did update item.  Item: %@", item);
     [self.tableView reloadData];
+}
+
+#pragma mark - LTHLocationManagerDelegate
+
+- (void)trackingStatusDidUpdate:(BOOL)status
+{
+    NSLog(@"LocationManager didChangeAuthorizationStatus: %d", status);
+    
+    [self.toggleSwitch setOn:status animated:YES];
 }
 
 @end
