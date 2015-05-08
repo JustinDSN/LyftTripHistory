@@ -7,10 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "LTHTripStore.h"
 
 @interface LTHLocationManager : NSObject
 
 @property (nonatomic, readonly) BOOL isAuthorized;
+
+- (instancetype)initWithTripStore:(LTHTripStore *)tripStore;
 
 - (BOOL)requestPermission;
 - (void)startStandardUpdates;

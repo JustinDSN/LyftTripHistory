@@ -8,7 +8,6 @@
 
 @import CoreLocation;
 #import "LTHLocationManager.h"
-#import "LTHTrip.h"
 
 static float kMPHRatio = 2.23694;
 static int kMinMPH = 10;
@@ -21,8 +20,9 @@ static NSString *kStreetKey = @"Street";
     NSTimer *_timer;
 }
 
-@property (nonatomic) CLLocationManager *manager;
 @property (nonatomic) CLGeocoder *geocoder;
+@property (nonatomic) CLLocationManager *manager;
+@property (nonatomic) LTHTripStore *tripStore;
 
 @end
 
@@ -30,9 +30,16 @@ static NSString *kStreetKey = @"Street";
 
 - (instancetype)init
 {
+    return [self initWithTripStore:[LTHTripStore sharedStore]];
+}
+
+- (instancetype)initWithTripStore:(LTHTripStore *)tripStore
+{
     self = [super init];
     
     if (self) {
+        self.tripStore = tripStore;
+        
         self.manager = [[CLLocationManager alloc] init];
         self.manager.delegate = self;
         
@@ -120,7 +127,9 @@ static NSString *kStreetKey = @"Street";
             if (_trip == nil) {
                 //Not tracking a trip, create a new trip.
                 NSLog(@"Creating trip.");
-                _trip = [[LTHTrip alloc] initWithFirstLocation:[locations firstObject]];
+                
+                _trip = [self.tripStore createItem];
+                _trip.firstLocation = [locations firstObject];
                 
                 //Reverse geocode the first location.
                 [self.geocoder reverseGeocodeLocation:_trip.firstLocation completionHandler:^(NSArray *placemarks, NSError *error) {
@@ -152,23 +161,27 @@ static NSString *kStreetKey = @"Street";
 
 - (void)endTrip
 {
-    NSLog(@"End Trip Called.");
-    NSTimeInterval intervalSinceLastUpdate = [[NSDate date] timeIntervalSinceDate:_trip.lastLocation.timestamp];
+    NSLog(@"Timer Fired");
     
-    if (intervalSinceLastUpdate > kDeviceIdleTime) {
-        NSLog(@"The device has been still for %f seconds.", intervalSinceLastUpdate);
+    if (_trip) {
+        NSTimeInterval intervalSinceLastUpdate = [[NSDate date] timeIntervalSinceDate:_trip.lastLocation.timestamp];
         
-        if (!_trip.lastLocationAddress) {
-            [self.geocoder reverseGeocodeLocation:_trip.lastLocation completionHandler:^(NSArray *placemarks, NSError *error) {
-                if (error) {
-                    NSLog(@"Error: %@, UserInfo: %@", error.localizedDescription, error.userInfo);
-                }
-                
-                CLPlacemark *placemark = [placemarks firstObject];
-                _trip.lastLocationAddress = placemark.addressDictionary[kStreetKey];
-                
-                NSLog(@"Trip has been completed. Trip %@", _trip);
-            }];
+        if (intervalSinceLastUpdate > kDeviceIdleTime) {
+            NSLog(@"The device has been still for %f seconds.", intervalSinceLastUpdate);
+            
+            if (!_trip.lastLocationAddress) {
+                [self.geocoder reverseGeocodeLocation:_trip.lastLocation completionHandler:^(NSArray *placemarks, NSError *error) {
+                    if (error) {
+                        NSLog(@"Error: %@, UserInfo: %@", error.localizedDescription, error.userInfo);
+                    }
+                    
+                    CLPlacemark *placemark = [placemarks firstObject];
+                    _trip.lastLocationAddress = placemark.addressDictionary[kStreetKey];
+                    
+                    NSLog(@"Trip has been completed. Trip %@", _trip);
+                    _trip = nil;
+                }];
+            }
         }
     }
 }

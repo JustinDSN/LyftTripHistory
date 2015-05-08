@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D0CD38501AFC3DFF007E9B7D /* LTHTripStore.m in Sources */ = {isa = PBXBuildFile; fileRef = D0CD384F1AFC3DFF007E9B7D /* LTHTripStore.m */; };
 		D0FEB7AC1AFBD5880014FF01 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D0FEB7AB1AFBD5880014FF01 /* main.m */; };
 		D0FEB7AF1AFBD5880014FF01 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D0FEB7AE1AFBD5880014FF01 /* AppDelegate.m */; };
 		D0FEB7B51AFBD5880014FF01 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D0FEB7B31AFBD5880014FF01 /* Main.storyboard */; };
@@ -31,6 +32,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		D0CD384E1AFC3DFF007E9B7D /* LTHTripStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LTHTripStore.h; sourceTree = "<group>"; };
+		D0CD384F1AFC3DFF007E9B7D /* LTHTripStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LTHTripStore.m; sourceTree = "<group>"; };
 		D0FEB7A61AFBD5880014FF01 /* LyftTripHistory.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LyftTripHistory.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0FEB7AA1AFBD5880014FF01 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D0FEB7AB1AFBD5880014FF01 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -109,6 +112,8 @@
 				D0FEB7DA1AFBE9DF0014FF01 /* LTHLocationManager.m */,
 				D0FEB7DC1AFC0BCA0014FF01 /* LTHTrip.h */,
 				D0FEB7DD1AFC0BCA0014FF01 /* LTHTrip.m */,
+				D0CD384E1AFC3DFF007E9B7D /* LTHTripStore.h */,
+				D0CD384F1AFC3DFF007E9B7D /* LTHTripStore.m */,
 			);
 			path = LyftTripHistory;
 			sourceTree = "<group>";
@@ -244,6 +249,7 @@
 				D0FEB7AF1AFBD5880014FF01 /* AppDelegate.m in Sources */,
 				D0FEB7DB1AFBE9DF0014FF01 /* LTHLocationManager.m in Sources */,
 				D0FEB7AC1AFBD5880014FF01 /* main.m in Sources */,
+				D0CD38501AFC3DFF007E9B7D /* LTHTripStore.m in Sources */,
 				D0FEB7DE1AFC0BCA0014FF01 /* LTHTrip.m in Sources */,
 				D0FEB7D51AFBD7FD0014FF01 /* LTHHistoryTableViewController.m in Sources */,
 			);
@@ -440,6 +446,7 @@
 				D0FEB7CB1AFBD5880014FF01 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		D0FEB7CC1AFBD5880014FF01 /* Build configuration list for PBXNativeTarget "LyftTripHistoryTests" */ = {
 			isa = XCConfigurationList;
@@ -448,6 +455,7 @@
 				D0FEB7CE1AFBD5880014FF01 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
