@@ -7,8 +7,14 @@
 //
 
 #import "AppDelegate.h"
+#import "LTHLocationManager.h"
+#import "LTHTripStore.h"
+#import "LTHHistoryTableViewController.h"
 
 @interface AppDelegate ()
+
+@property (nonatomic) LTHLocationManager *locationManager;
+@property (nonatomic) LTHTripStore *tripStore;
 
 @end
 
@@ -17,6 +23,31 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    self.tripStore = [LTHTripStore sharedStore];
+    self.locationManager = [[LTHLocationManager alloc] initWithTripStore:self.tripStore];
+    
+    UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    UIViewController *initialViewController = [storyBoard instantiateInitialViewController];
+    
+    if ([initialViewController isKindOfClass:[UINavigationController class]]) {
+        UINavigationController *navigationController = (UINavigationController *)initialViewController;
+        
+        UIViewController *topViewController = [navigationController topViewController];
+
+        if ([topViewController isKindOfClass:[LTHHistoryTableViewController class]]) {
+            LTHHistoryTableViewController *historyTableViewController = (LTHHistoryTableViewController *)topViewController;
+            
+            historyTableViewController.locationManager = self.locationManager;
+            historyTableViewController.tripStore = self.tripStore;
+        } else {
+            NSLog(@"ERROR: Unexpected view controller class of: %@", NSStringFromClass([topViewController class]));
+        }
+    } else {
+        NSLog(@"ERROR: Unexpected view controller class of: %@", NSStringFromClass([initialViewController class]));
+    }
+    
+    self.window.rootViewController = initialViewController;
+    
     return YES;
 }
 

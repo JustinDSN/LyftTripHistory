@@ -12,16 +12,12 @@
 
 @interface LTHHistoryTableViewController () <LTHHeaderTableViewCellDelegate>
 
-@property (nonatomic) LTHLocationManager *locationManager;
-
 @end
 
 @implementation LTHHistoryTableViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    self.locationManager = [[LTHLocationManager alloc] init];
     
     [self configureNavigationItem];
     

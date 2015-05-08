@@ -7,7 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "LTHLocationManager.h"
+#import "LTHTripStore.h"
 
 @interface LTHHistoryTableViewController : UITableViewController
+
+@property (nonatomic) LTHLocationManager *locationManager;
+@property (nonatomic) LTHTripStore *tripStore;
 
 @end
