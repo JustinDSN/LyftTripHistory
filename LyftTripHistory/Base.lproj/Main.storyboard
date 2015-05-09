@@ -70,20 +70,20 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_car" translatesAutoresizingMaskIntoConstraints="NO" id="hNc-cz-2ya">
-                                            <rect key="frame" x="30" y="14" width="26" height="21"/>
+                                            <rect key="frame" x="30" y="8" width="26" height="21"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="20.5" id="7ct-zP-4de"/>
                                                 <constraint firstAttribute="width" constant="26.5" id="lak-4o-Tp8"/>
                                             </constraints>
                                         </imageView>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="185 Clara St &gt; 568 Brannan St" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TMO-a2-3GU">
-                                            <rect key="frame" x="76" y="14" width="504" height="21"/>
-                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                            <rect key="frame" x="76" y="8" width="504" height="36"/>
+                                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
                                             <color key="textColor" red="0.38431372549999998" green="0.37647058820000001" blue="0.36470588240000001" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="3:35pm­-3​:44pm (9 min, 14 sec)" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8Qs-Ml-Adp">
-                                            <rect key="frame" x="76" y="45" width="494" height="16"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="3:35pm­-3​:44pm (9 min, 14 sec)" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8Qs-Ml-Adp">
+                                            <rect key="frame" x="76" y="49" width="494" height="16"/>
                                             <fontDescription key="fontDescription" type="italicSystem" pointSize="13"/>
                                             <color key="textColor" red="0.49803921569999998" green="0.48627450979999998" blue="0.46666666670000001" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
@@ -104,15 +104,15 @@
                                     </subviews>
                                     <constraints>
                                         <constraint firstAttribute="trailing" secondItem="8Qs-Ml-Adp" secondAttribute="trailing" constant="30" id="66Z-f1-kzo"/>
-                                        <constraint firstItem="TMO-a2-3GU" firstAttribute="top" secondItem="IbG-t5-mS1" secondAttribute="top" constant="14" id="E1g-ZX-9rF"/>
-                                        <constraint firstItem="8Qs-Ml-Adp" firstAttribute="top" secondItem="TMO-a2-3GU" secondAttribute="bottom" constant="10" id="FkJ-lp-4gr"/>
+                                        <constraint firstItem="TMO-a2-3GU" firstAttribute="top" secondItem="IbG-t5-mS1" secondAttribute="top" constant="8" id="E1g-ZX-9rF"/>
+                                        <constraint firstItem="8Qs-Ml-Adp" firstAttribute="top" secondItem="TMO-a2-3GU" secondAttribute="bottom" constant="5" id="FkJ-lp-4gr"/>
                                         <constraint firstItem="8Qs-Ml-Adp" firstAttribute="leading" secondItem="TMO-a2-3GU" secondAttribute="leading" id="Fqd-zw-HW0"/>
                                         <constraint firstAttribute="trailing" secondItem="TMO-a2-3GU" secondAttribute="trailing" constant="20" id="HaM-Ps-7kI"/>
                                         <constraint firstItem="hNc-cz-2ya" firstAttribute="leading" secondItem="IbG-t5-mS1" secondAttribute="leading" constant="30" id="Y38-lk-tb3"/>
                                         <constraint firstAttribute="trailing" secondItem="1Ml-FU-iTe" secondAttribute="trailing" id="aCH-gt-HAp"/>
                                         <constraint firstAttribute="bottom" secondItem="1Ml-FU-iTe" secondAttribute="bottom" id="oRz-kz-44R"/>
                                         <constraint firstItem="TMO-a2-3GU" firstAttribute="top" secondItem="hNc-cz-2ya" secondAttribute="top" id="sCb-oJ-Ztl"/>
-                                        <constraint firstAttribute="bottom" secondItem="8Qs-Ml-Adp" secondAttribute="bottom" constant="14" id="uek-wQ-qbj"/>
+                                        <constraint firstAttribute="bottom" secondItem="8Qs-Ml-Adp" secondAttribute="bottom" constant="10" id="uek-wQ-qbj"/>
                                         <constraint firstItem="1Ml-FU-iTe" firstAttribute="leading" secondItem="IbG-t5-mS1" secondAttribute="leading" id="uxY-fy-P97"/>
                                         <constraint firstItem="TMO-a2-3GU" firstAttribute="leading" secondItem="hNc-cz-2ya" secondAttribute="trailing" constant="20" id="wTj-ml-gfL"/>
                                     </constraints>
