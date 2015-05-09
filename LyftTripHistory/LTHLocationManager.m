@@ -17,6 +17,7 @@ static NSString * const LTHUserDefaultsKeyTripLoggingEnabled = @"LTHUserDefaults
     LTHTrip *_trip;
     NSTimer *_timer;
     BOOL _tripLoggingEnabled;
+    NSDate *_tripLoggingEnabledDate;
 }
 
 @property (nonatomic) CLLocationManager *manager;
@@ -50,6 +51,10 @@ static NSString * const LTHUserDefaultsKeyTripLoggingEnabled = @"LTHUserDefaults
         
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         _tripLoggingEnabled = [userDefaults boolForKey:LTHUserDefaultsKeyTripLoggingEnabled];
+        
+        if (_tripLoggingEnabled) {
+            _tripLoggingEnabledDate = [NSDate date];
+        }
     }
     
     return self;
@@ -73,6 +78,11 @@ static NSString * const LTHUserDefaultsKeyTripLoggingEnabled = @"LTHUserDefaults
     //Set instance variable
     _tripLoggingEnabled = enabled;
     
+    if (enabled) {
+        //Track when trip logging was enabled
+        _tripLoggingEnabledDate = [NSDate date];
+    }
+    
     //Change Authorization Status and Trip Logging
     [self changeAuthorizationToStatus:[CLLocationManager authorizationStatus] tripLogging:enabled];
 }
@@ -86,8 +96,16 @@ static NSString * const LTHUserDefaultsKeyTripLoggingEnabled = @"LTHUserDefaults
         if (_trip == nil) {
             //We're not currently tracking a trip
             for (CLLocation *location in locations) {
-                if ([LTHTrip tripShouldBeginWithLocation:location]) {
-                    [self createTripForLocation:location];
+                //Filter out old locations (before we turned on location tracking)
+                NSComparisonResult comparisonResult = [location.timestamp compare:_tripLoggingEnabledDate];
+                
+                if (comparisonResult == NSOrderedDescending || comparisonResult == NSOrderedSame) {
+                    if ([LTHTrip tripShouldBeginWithLocation:location]) {
+                        [self createTripForLocation:location];
+                    }
+                } else {
+                    NSLog(@"Not creating trip because out of date location was received.");
+                    NSLog(@"_tripLoggingEnabledDate: %@ location timestamp: %@", _tripLoggingEnabledDate, location.timestamp);
                 }
             }
         } else {
