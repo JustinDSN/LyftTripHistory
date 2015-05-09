@@ -279,6 +279,9 @@ static NSString * const LTHUserDefaultsKeyTripLoggingEnabled = @"LTHUserDefaults
             break;
         case LTHTripLoggingStatusNotDetermined:
             switch (newTripLoggingStatus) {
+                case LTHTripLoggingStatusNotDetermined:
+                    //Do nothing
+                    break;
                 case LTHTripLoggingStatusRequestRequired:
                     [self.manager requestWhenInUseAuthorization];
                     break;
