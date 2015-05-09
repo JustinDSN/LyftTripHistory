@@ -62,6 +62,21 @@ static NSString * const kLTHTripLastLocationKey = @"lastLocation";
 
 - (NSString *)titleDescription
 {
+    //In Progress
+    //I-280 -> In Progress
+    //I-280 -> I-280
+    
+    if (self.completed) {
+        if (!self.firstLocationAddress) {
+            //Fetch first location address, something caused it not to get updated (app terminated).
+            [self reverseGeocodeFirstLocation];
+        }
+        if (!self.lastLocationAddress) {
+            //Fetch first location address, something caused it not to get updated (app terminated).
+            [self reverseGeocodeLastLocation];
+        }
+    }
+    
     NSString *inProgressString = NSLocalizedString(@"trip_in_progress_string", @"In Progress");
     
     NSString *formattedFirstLocationAddress = self.firstLocationAddress ?: inProgressString;
