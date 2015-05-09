@@ -40,6 +40,7 @@
                                             </constraints>
                                         </view>
                                     </subviews>
+                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <constraints>
                                         <constraint firstItem="bCZ-sp-ZYL" firstAttribute="leading" secondItem="SVV-Xy-3xL" secondAttribute="leading" id="0pz-3R-oSi"/>
                                         <constraint firstAttribute="trailing" secondItem="5DD-hm-tJD" secondAttribute="trailing" constant="30" id="3Hg-n8-8uu"/>
@@ -83,8 +84,8 @@
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="3:35pm­-3​:44pm (9 min, 14 sec)" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8Qs-Ml-Adp">
                                             <rect key="frame" x="76" y="45" width="494" height="16"/>
-                                            <fontDescription key="fontDescription" type="system" weight="thin" pointSize="14"/>
-                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <fontDescription key="fontDescription" type="italicSystem" pointSize="13"/>
+                                            <color key="textColor" red="0.49803921569999998" green="0.48627450979999998" blue="0.46666666670000001" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1Ml-FU-iTe" userLabel="Separator">
