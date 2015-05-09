@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 @import CoreLocation;
 
-@interface LTHTrip : NSObject
+@interface LTHTrip : NSObject <NSCoding>
 
 @property (nonatomic, readonly) NSString *durationDescription;
 @property (nonatomic) CLLocation *firstLocation;

@@ -14,6 +14,11 @@ static int kMinMPH = 10;
 //Cache date formatter for efficiency
 static NSDateFormatter *sDateFormatter;
 
+static NSString * const kLTHTripFirstLocationAddressKey = @"firstLocationAddress";
+static NSString * const kLTHTripFirstLocationKey = @"firstLocation";
+static NSString * const kLTHTripLastLocationAddressKey = @"lastLocationAddress";
+static NSString * const kLTHTripLastLocationKey = @"lastLocation";
+
 @interface LTHTrip ()
 
 @property (nonatomic, readonly, getter=isInProgress) BOOL inProgress;
@@ -109,5 +114,30 @@ static NSDateFormatter *sDateFormatter;
         return @"";
     }
 }
+
+#pragma mark NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder
+{
+    [aCoder encodeObject:self.firstLocationAddress forKey:kLTHTripFirstLocationAddressKey];
+    [aCoder encodeObject:self.firstLocation forKey:kLTHTripFirstLocationKey];
+    [aCoder encodeObject:self.lastLocationAddress forKey:kLTHTripLastLocationAddressKey];
+    [aCoder encodeObject:self.lastLocation forKey:kLTHTripLastLocationKey];
+}
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder
+{
+    self = [super init];
+    
+    if (self) {
+        _firstLocationAddress = [aDecoder decodeObjectForKey:kLTHTripFirstLocationAddressKey];
+        _firstLocation = [aDecoder decodeObjectOfClass:[CLLocation class] forKey:kLTHTripFirstLocationKey];
+        _lastLocationAddress = [aDecoder decodeObjectForKey:kLTHTripLastLocationAddressKey];
+        _lastLocation = [aDecoder decodeObjectOfClass:[CLLocation class] forKey:kLTHTripLastLocationKey];
+    }
+    
+    return self;
+}
+
 
 @end
