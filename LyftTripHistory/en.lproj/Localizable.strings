@@ -10,6 +10,9 @@
 /* OK Button */
 "ok_button" = "OK";
 
+/* Open Settings Button */
+"open_settings_button" = "Open Settings";
+
 /* In Progress */
 "trip_in_progress_string" = "In Progress";
 

@@ -22,6 +22,7 @@ typedef NS_ENUM(int, LTHTripLoggingStatus) {
 @protocol LTHLocationManagerDelegate <NSObject>
 
 - (void)trackingStatusDidUpdate:(BOOL)status;
+- (void)locationServicesIsDisabled;
 
 @end
 

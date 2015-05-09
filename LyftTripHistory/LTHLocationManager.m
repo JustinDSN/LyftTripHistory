@@ -235,8 +235,7 @@ static NSString * const LTHUserDefaultsKeyTripLoggingEnabled = @"LTHUserDefaults
                     [self.manager startUpdatingLocation];
                     break;
                 case LTHTripLoggingStatusDenied:
-                    //Do nothing, no change.
-                    //TODO Notify view controller
+                    [self.delegate locationServicesIsDisabled];
                     break;
                 default:
                     NSLog(@"Unexpected newStatus of %d for LTHTripLoggingStatusAuthorizedOn", newTripLoggingStatus);
@@ -255,6 +254,7 @@ static NSString * const LTHUserDefaultsKeyTripLoggingEnabled = @"LTHUserDefaults
                 case LTHTripLoggingStatusDenied:
                     [self.manager stopUpdatingLocation];
                     [self fireAndInvalidateTimer];
+                    [self.delegate locationServicesIsDisabled];
                     break;
                 default:
                     NSLog(@"Unexpected newStatus of %d for LTHTripLoggingStatusAuthorizedOn", newTripLoggingStatus);
@@ -270,7 +270,7 @@ static NSString * const LTHUserDefaultsKeyTripLoggingEnabled = @"LTHUserDefaults
                     [self.manager startUpdatingLocation];
                     break;
                 case LTHTripLoggingStatusDenied:
-                    //TODO Notify view controller
+                    [self.delegate locationServicesIsDisabled];
                     break;
                 default:
                     NSLog(@"Unexpected newStatus of %d for LTHTripLoggingStatusDenied", newTripLoggingStatus);
@@ -296,8 +296,7 @@ static NSString * const LTHUserDefaultsKeyTripLoggingEnabled = @"LTHUserDefaults
                     [self.manager startUpdatingLocation];
                     break;
                 case LTHTripLoggingStatusDenied:
-                    //Do nothing, no change.
-                    //Alert view controller of denial
+                    [self.delegate locationServicesIsDisabled];
                     break;
                 default:
                     NSLog(@"Unexpected newStatus of %d for LTHTripLoggingStatusRequestRequired", newTripLoggingStatus);

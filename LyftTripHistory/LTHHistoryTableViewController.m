@@ -91,28 +91,6 @@
     [self.locationManager setTripLogging:toggleSwitch.on];
 }
 
-//Display alert indicating that the user has disabled location services.
-- (void)presentLocationServicesDeniedWithSwitch:(UISwitch *)toggleSwitch
-{
-    NSString *title = NSLocalizedString(@"location_manager_denied_title", @"title for message: location manager has been denied by the user");
-    NSString *message = NSLocalizedString(@"location_manager_denied_message", @"location manager has been denied by the user");
-    
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title
-                                                                             message:message
-                                                                      preferredStyle:UIAlertControllerStyleAlert];
-    
-    NSString *actionTitle = NSLocalizedString(@"ok_button", @"OK Button");
-    UIAlertAction *alertAction = [UIAlertAction actionWithTitle:actionTitle style:UIAlertActionStyleDefault handler:nil];
-    
-    //TODO: Add help button to show user how to do it.
-    
-    [alertController addAction:alertAction];
-    
-    [self presentViewController:alertController animated:YES completion:^{
-        [toggleSwitch setOn:NO animated:YES];
-    }];
-}
-
 #pragma mark - LTHTripStoreDelegate
 
 - (void)tripStore:(LTHTripStore *)tripStore didCreateItem:(LTHTrip *)item
@@ -146,4 +124,28 @@
     [self.toggleSwitch setOn:status animated:YES];
 }
 
+- (void)locationServicesIsDisabled
+{
+    NSString *title = NSLocalizedString(@"location_manager_denied_title", @"title for message: location manager has been denied by the user");
+    NSString *message = NSLocalizedString(@"location_manager_denied_message", @"location manager has been denied by the user");
+    
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title
+                                                                             message:message
+                                                                      preferredStyle:UIAlertControllerStyleAlert];
+    
+    NSString *actionTitle = NSLocalizedString(@"ok_button", @"OK Button");
+    UIAlertAction *alertAction = [UIAlertAction actionWithTitle:actionTitle style:UIAlertActionStyleDefault handler:nil];
+    [alertController addAction:alertAction];
+    
+    NSString *openTitle = NSLocalizedString(@"open_settings_button", @"Open Settings Button");
+    UIAlertAction *openAction = [UIAlertAction actionWithTitle:openTitle
+                                                         style:UIAlertActionStyleDefault
+                                                       handler:^(UIAlertAction *action) {
+                                                           NSURL *url = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
+                                                           [[UIApplication sharedApplication] openURL:url];
+                                                       }];
+    [alertController addAction:openAction];
+    
+    [self presentViewController:alertController animated:YES completion:nil];
+}
 @end
