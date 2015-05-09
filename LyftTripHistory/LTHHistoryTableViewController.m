@@ -74,7 +74,8 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     LTHTrip *trip = self.tripStore.allItems[indexPath.row];
     
-    LTHDetailTableViewCell *cell = (LTHDetailTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"LTHDetailTableViewCell" forIndexPath:indexPath];
+    LTHDetailTableViewCell *cell = (LTHDetailTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"LTHDetailTableViewCell"
+                                                                                             forIndexPath:indexPath];
     
     cell.titleLabel.text = trip.titleDescription;
     cell.timeLabel.text = trip.durationDescription;
@@ -82,25 +83,13 @@
     return cell;
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
-
 #pragma mark - LTHHeaderTableViewCellDelegate
 
 - (void)headerTableViewCell:(LTHHeaderTableViewCell *)cell didChangeToggleSwitch:(UISwitch *)toggleSwitch;
 {
     NSLog(@"Trip Logging %@", toggleSwitch.on ? @"Enabled" : @"Disabled");
     [self.locationManager setTripLogging:toggleSwitch.on];
-    //            [self presentLocationServicesDeniedWithSwitch:toggleSwitch];
 }
-
 
 //Display alert indicating that the user has disabled location services.
 - (void)presentLocationServicesDeniedWithSwitch:(UISwitch *)toggleSwitch
