@@ -10,7 +10,6 @@
 #import "LTHLocationManager.h"
 
 static int kTimerInterval = 5;
-static NSString *kStreetKey = @"Street";
 static NSString * const LTHUserDefaultsKeyTripLoggingEnabled = @"LTHUserDefaultsKeyTripLoggingEnabled";
 
 @interface LTHLocationManager () <CLLocationManagerDelegate> {
@@ -20,7 +19,6 @@ static NSString * const LTHUserDefaultsKeyTripLoggingEnabled = @"LTHUserDefaults
     BOOL _tripLoggingEnabled;
 }
 
-@property (nonatomic) CLGeocoder *geocoder;
 @property (nonatomic) CLLocationManager *manager;
 @property (nonatomic) LTHTripStore *tripStore;
 
@@ -58,15 +56,6 @@ static NSString * const LTHUserDefaultsKeyTripLoggingEnabled = @"LTHUserDefaults
 }
 
 #pragma mark - Properties
-
-- (CLGeocoder *)geocoder
-{
-    if (!_geocoder) {
-        _geocoder = [[CLGeocoder alloc] init];
-    }
-    
-    return _geocoder;
-}
 
 - (LTHTripLoggingStatus)tripLoggingStatus
 {
@@ -123,8 +112,6 @@ static NSString * const LTHUserDefaultsKeyTripLoggingEnabled = @"LTHUserDefaults
     [self changeAuthorizationToStatus:status tripLogging:_tripLoggingEnabled];
 }
 
-#pragma mark - Helper Methods
-
 #pragma mark - Trip Helper Methods
 
 - (void)createTripForLocation:(CLLocation *)location
@@ -133,18 +120,6 @@ static NSString * const LTHUserDefaultsKeyTripLoggingEnabled = @"LTHUserDefaults
     
     _trip = [self.tripStore createItem];
     _trip.firstLocation = location;
-    
-    //Reverse geocode the first location.
-    [self.geocoder reverseGeocodeLocation:_trip.firstLocation completionHandler:^(NSArray *placemarks, NSError *error) {
-        if (error) {
-            NSLog(@"Error reverse geocoding first location: %@, UserInfo: %@", error.localizedDescription, error.userInfo);
-            _trip.firstLocationAddress = NSLocalizedString(@"error_reverse_geocoding_location", @"Error reverse geocoding location.");
-            return;
-        }
-        
-        CLPlacemark *placemark = [placemarks firstObject];
-        _trip.firstLocationAddress = placemark.addressDictionary[kStreetKey];
-    }];
 }
 
 - (void)updateTripLastLocation:(CLLocation *)location
@@ -168,22 +143,13 @@ static NSString * const LTHUserDefaultsKeyTripLoggingEnabled = @"LTHUserDefaults
 {
     NSLog(@"Timer Fired");
     
-    LTHTrip *tempTrip = _trip;
-    _trip = nil;
+    _trip.completed = YES;
+    NSLog(@"Trip completed.  Trip %@", _trip);
     
-    [self.geocoder reverseGeocodeLocation:tempTrip.lastLocation completionHandler:^(NSArray *placemarks, NSError *error) {
-        if (error) {
-            NSLog(@"Error reverse geocoding last location: %@, UserInfo: %@", error.localizedDescription, error.userInfo);
-            _trip.lastLocationAddress = NSLocalizedString(@"error_reverse_geocoding_location", @"Error reverse geocoding location.");
-            return;
-        }
-        
-        CLPlacemark *placemark = [placemarks firstObject];
-        tempTrip.lastLocationAddress = placemark.addressDictionary[kStreetKey];
-        
-        NSLog(@"Trip completed.  Trip %@", tempTrip);
-    }];
+    _trip = nil; //Clear reference to current trip.
 }
+
+#pragma mark State Machine Methods
 
 - (BOOL)boolForLoggingStatus:(LTHTripLoggingStatus)status
 {

@@ -11,6 +11,7 @@
 
 @interface LTHTrip : NSObject <NSCoding>
 
+@property (nonatomic, assign, getter=isCompleted) BOOL completed;
 @property (nonatomic, readonly) NSString *durationDescription;
 @property (nonatomic) CLLocation *firstLocation;
 @property (nonatomic, copy) NSString *firstLocationAddress;

@@ -6,22 +6,22 @@
 //  Copyright (c) 2015 Justin Steffen. All rights reserved.
 //
 
+@import CoreLocation;
 #import "LTHTrip.h"
 
-static float kMPHRatio = 2.23694;
-static int kMinMPH = 10;
-
-//Cache date formatter for efficiency
 static NSDateFormatter *sDateFormatter;
+static CLGeocoder * sGeocoder;
 
+static const float kMPHRatio = 2.23694;
+static const int kMinMPH = 10;
+static NSString * const kStreetKey = @"Street";
+static NSString * const kLTHTripCompletedKey = @"completed";
 static NSString * const kLTHTripFirstLocationAddressKey = @"firstLocationAddress";
 static NSString * const kLTHTripFirstLocationKey = @"firstLocation";
 static NSString * const kLTHTripLastLocationAddressKey = @"lastLocationAddress";
 static NSString * const kLTHTripLastLocationKey = @"lastLocation";
 
 @interface LTHTrip ()
-
-@property (nonatomic, readonly, getter=isInProgress) BOOL inProgress;
 
 @end
 
@@ -49,7 +49,7 @@ static NSString * const kLTHTripLastLocationKey = @"lastLocation";
     NSString *firstLocationTime = [sDateFormatter stringFromDate:self.firstLocation.timestamp];
     NSString *lastLocationTime;
     
-    if (self.isInProgress) {
+    if (!self.isCompleted) {
         lastLocationTime = NSLocalizedString(@"trip_in_progress_string", @"In Progress");
         
         return [NSString stringWithFormat:@"%@-%@", firstLocationTime, lastLocationTime];
@@ -58,11 +58,6 @@ static NSString * const kLTHTripLastLocationKey = @"lastLocation";
         
         return [NSString stringWithFormat:@"%@-%@ %@", firstLocationTime, lastLocationTime, [self durationComponents]];
     }
-}
-
-- (BOOL)isInProgress
-{
-    return self.lastLocationAddress == nil;
 }
 
 - (NSString *)titleDescription
@@ -79,11 +74,25 @@ static NSString * const kLTHTripLastLocationKey = @"lastLocation";
     }
 }
 
+- (void)setCompleted:(BOOL)completed
+{
+    _completed = completed;
+    
+    [self reverseGeocodeLastLocation];
+}
+
+- (void)setFirstLocation:(CLLocation *)firstLocation
+{
+    _firstLocation = firstLocation;
+    
+    [self reverseGeocodeFirstLocation];
+}
+
 #pragma mark Instance Methods
 
 - (NSString *)description
 {
-    NSString *description = [NSString stringWithFormat:@"%@ - %@", self.titleDescription, self.durationDescription];
+    NSString *description = [NSString stringWithFormat:@"Trip (Completed: %@)", self.isCompleted ? @"YES" : @"NO"];
     
     return description;
 }
@@ -115,10 +124,49 @@ static NSString * const kLTHTripLastLocationKey = @"lastLocation";
     }
 }
 
+- (void)reverseGeocodeFirstLocation
+{
+    if (!sGeocoder) {
+        sGeocoder = [[CLGeocoder alloc] init];
+    }
+    
+    //Reverse geocode the first location.
+    [sGeocoder reverseGeocodeLocation:self.firstLocation completionHandler:^(NSArray *placemarks, NSError *error) {
+        if (error) {
+            NSLog(@"Error reverse geocoding first location: %@, UserInfo: %@", error.localizedDescription, error.userInfo);
+            self.firstLocationAddress = NSLocalizedString(@"error_reverse_geocoding_location", @"Error reverse geocoding location.");
+            return;
+        }
+        
+        CLPlacemark *placemark = [placemarks firstObject];
+        self.firstLocationAddress = placemark.addressDictionary[kStreetKey];
+    }];
+}
+
+- (void)reverseGeocodeLastLocation
+{
+    if (!sGeocoder) {
+        sGeocoder = [[CLGeocoder alloc] init];
+    }
+    
+    [sGeocoder reverseGeocodeLocation:self.lastLocation completionHandler:^(NSArray *placemarks, NSError *error) {
+        if (error) {
+            NSLog(@"Error reverse geocoding last location: %@, UserInfo: %@", error.localizedDescription, error.userInfo);
+            self.lastLocationAddress = NSLocalizedString(@"error_reverse_geocoding_location", @"Error reverse geocoding location.");
+            return;
+        }
+        
+        CLPlacemark *placemark = [placemarks firstObject];
+        self.lastLocationAddress = placemark.addressDictionary[kStreetKey];
+    }];
+}
+
+
 #pragma mark NSCoding
 
 - (void)encodeWithCoder:(NSCoder *)aCoder
 {
+    [aCoder encodeBool:self.completed forKey:kLTHTripCompletedKey];
     [aCoder encodeObject:self.firstLocationAddress forKey:kLTHTripFirstLocationAddressKey];
     [aCoder encodeObject:self.firstLocation forKey:kLTHTripFirstLocationKey];
     [aCoder encodeObject:self.lastLocationAddress forKey:kLTHTripLastLocationAddressKey];
@@ -130,6 +178,7 @@ static NSString * const kLTHTripLastLocationKey = @"lastLocation";
     self = [super init];
     
     if (self) {
+        _completed = [aDecoder decodeBoolForKey:kLTHTripCompletedKey];
         _firstLocationAddress = [aDecoder decodeObjectForKey:kLTHTripFirstLocationAddressKey];
         _firstLocation = [aDecoder decodeObjectOfClass:[CLLocation class] forKey:kLTHTripFirstLocationKey];
         _lastLocationAddress = [aDecoder decodeObjectForKey:kLTHTripLastLocationAddressKey];
