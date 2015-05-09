@@ -76,6 +76,10 @@
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     
+    //End current trip
+    LTHTrip *currentTrip = self.tripStore.allItems.firstObject;
+    currentTrip.completed = YES;
+    
     [self saveData];
 }
 
