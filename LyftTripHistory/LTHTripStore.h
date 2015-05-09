@@ -27,4 +27,6 @@
 
 - (LTHTrip *)createItem;
 
+- (BOOL)saveChanges;
+
 @end
