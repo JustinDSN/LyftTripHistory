@@ -9,7 +9,7 @@
 @import CoreLocation;
 #import "LTHLocationManager.h"
 
-static int kTimerInterval = 5;
+static int kTimerInterval = 60;
 static NSString * const LTHUserDefaultsKeyTripLoggingEnabled = @"LTHUserDefaultsKeyTripLoggingEnabled";
 
 @interface LTHLocationManager () <CLLocationManagerDelegate> {
