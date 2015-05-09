@@ -46,17 +46,19 @@ static NSString * const kLTHTripLastLocationKey = @"lastLocation";
         sDateFormatter.PMSymbol = [sDateFormatter.PMSymbol lowercaseString];
     }
     
-    NSString *firstLocationTime = [sDateFormatter stringFromDate:self.firstLocation.timestamp];
-    NSString *lastLocationTime;
-    
-    if (!self.isCompleted) {
-        lastLocationTime = NSLocalizedString(@"trip_in_progress_string", @"In Progress");
-        
-        return [NSString stringWithFormat:@"%@-%@", firstLocationTime, lastLocationTime];
-    } else {
-        lastLocationTime = [sDateFormatter stringFromDate:self.lastLocation.timestamp];
+    if (self.isCompleted) {
+        NSString *firstLocationTime = [sDateFormatter stringFromDate:self.firstLocation.timestamp];
+        NSString *lastLocationTime = [sDateFormatter stringFromDate:self.lastLocation.timestamp];
         
         return [NSString stringWithFormat:@"%@-%@ %@", firstLocationTime, lastLocationTime, [self durationComponents]];
+    } else {
+        if (!self.firstLocation.timestamp) {
+            return NSLocalizedString(@"trip_in_progress_string", @"In Progress");
+        } else {
+            NSString *firstLocationTime = [sDateFormatter stringFromDate:self.firstLocation.timestamp];
+            NSString *lastLocationTime = NSLocalizedString(@"trip_in_progress_string", @"In Progress");
+            return [NSString stringWithFormat:@"%@-%@", firstLocationTime, lastLocationTime];
+        }
     }
 }
 
