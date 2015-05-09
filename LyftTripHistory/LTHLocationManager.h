@@ -27,13 +27,11 @@ typedef NS_ENUM(int, LTHTripLoggingStatus) {
 
 @interface LTHLocationManager : NSObject
 
-@property (nonatomic, readonly) BOOL isAuthorized;
 @property (nonatomic) id<LTHLocationManagerDelegate> delegate;
 @property (nonatomic, readonly) LTHTripLoggingStatus tripLoggingStatus;
 
 - (instancetype)initWithTripStore:(LTHTripStore *)tripStore;
 
 - (void)setTripLogging:(BOOL)enabled;
-
 
 @end

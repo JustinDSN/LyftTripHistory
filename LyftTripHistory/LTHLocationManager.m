@@ -11,13 +11,13 @@
 
 static int kTimerInterval = 5;
 static NSString *kStreetKey = @"Street";
-static NSString * const LTHUserDefaultsKeyToggleSwitchEnabled = @"LTHUserDefaultsKeyToggleSwitchEnabled";
+static NSString * const LTHUserDefaultsKeyTripLoggingEnabled = @"LTHUserDefaultsKeyTripLoggingEnabled";
 
 @interface LTHLocationManager () <CLLocationManagerDelegate> {
     LTHTripLoggingStatus _tripLoggingStatus;
     LTHTrip *_trip;
     NSTimer *_timer;
-    BOOL _userRequestedTripLogging;
+    BOOL _tripLoggingEnabled;
 }
 
 @property (nonatomic) CLGeocoder *geocoder;
@@ -48,7 +48,10 @@ static NSString * const LTHUserDefaultsKeyToggleSwitchEnabled = @"LTHUserDefault
         self.manager.pausesLocationUpdatesAutomatically = YES;
         self.manager.activityType = CLActivityTypeAutomotiveNavigation;
         
-        _tripLoggingStatus = [self loggingStatusForStatus:[CLLocationManager authorizationStatus] tripLogging:_userRequestedTripLogging];
+        _tripLoggingStatus = [self loggingStatusForStatus:[CLLocationManager authorizationStatus] tripLogging:_tripLoggingEnabled];
+        
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        _tripLoggingEnabled = [userDefaults boolForKey:LTHUserDefaultsKeyTripLoggingEnabled];
     }
     
     return self;
@@ -72,26 +75,16 @@ static NSString * const LTHUserDefaultsKeyToggleSwitchEnabled = @"LTHUserDefault
 
 #pragma mark - Methods
 
-- (BOOL)isAuthorized
-{
-    CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
-    
-    switch (status) {
-        case kCLAuthorizationStatusNotDetermined:
-        case kCLAuthorizationStatusRestricted:
-        case kCLAuthorizationStatusDenied:
-            return NO;
-            break;
-        case kCLAuthorizationStatusAuthorizedAlways:
-        case kCLAuthorizationStatusAuthorizedWhenInUse:
-            return YES;
-            break;
-    }
-}
-
 - (void)setTripLogging:(BOOL)enabled
 {
-    _userRequestedTripLogging = enabled;
+    //Update user defaults value
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setBool:enabled forKey:LTHUserDefaultsKeyTripLoggingEnabled];
+
+    //Set instance variable
+    _tripLoggingEnabled = enabled;
+    
+    //Change Authorization Status and Trip Logging
     [self changeAuthorizationToStatus:[CLLocationManager authorizationStatus] tripLogging:enabled];
 }
 
@@ -127,7 +120,7 @@ static NSString * const LTHUserDefaultsKeyToggleSwitchEnabled = @"LTHUserDefault
 
 - (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status
 {
-    [self changeAuthorizationToStatus:status tripLogging:_userRequestedTripLogging];
+    [self changeAuthorizationToStatus:status tripLogging:_tripLoggingEnabled];
 }
 
 #pragma mark - Helper Methods
@@ -330,10 +323,6 @@ static NSString * const LTHUserDefaultsKeyToggleSwitchEnabled = @"LTHUserDefault
     
     //Convert newLoggingStatus to bool
     BOOL loggingEnabled = [self boolForLoggingStatus:newTripLoggingStatus];
-    
-    //Save finalState to NSUserDefaults
-//    NSUserDefaults *standardDefaults = [NSUserDefaults standardUserDefaults];
-//    [standardDefaults setBool:loggingEnabled forKey:LTHUserDefaultsKeyToggleSwitchEnabled];
     
     //Notify delegate
     [self.delegate trackingStatusDidUpdate:loggingEnabled];
