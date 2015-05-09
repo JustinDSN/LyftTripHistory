@@ -42,7 +42,12 @@
         NSString *path = [self itemArchivePath];
         _privateItems = [NSKeyedUnarchiver unarchiveObjectWithFile:path];
         
-        if (!_privateItems) {
+        if (_privateItems) {
+            for (LTHTrip *item in _privateItems) {
+                [item addObserver:self forKeyPath:@"firstLocationAddress" options:NSKeyValueObservingOptionNew context:nil];
+                [item addObserver:self forKeyPath:@"lastLocationAddress" options:NSKeyValueObservingOptionNew context:nil];
+            }
+        } else {
             _privateItems = [[NSMutableArray alloc] init];
         }
     }
